@@ -33,8 +33,8 @@ Overall, the University Course Registration Portal enhances operational efficien
 -the student can see the last year courses and his ranking
 -there are three round for the course registration if one student doesn't get any courses in the first round than they will automatically apper for the next round
 -the admin can manage the vacancy for the courses
--admin can block a user account
-- 
+-admin can block a user account.
+
 
 5.non function requirement
 
