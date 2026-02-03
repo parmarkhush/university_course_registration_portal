@@ -1,18 +1,18 @@
-let users = []; // stores registered users
-
 // Switch to Register
 function showRegister() {
     document.getElementById("loginBox").classList.add("hidden");
     document.getElementById("registerBox").classList.remove("hidden");
+    document.getElementById("registerError").textContent = "";
 }
 
 // Switch to Login
 function showLogin() {
     document.getElementById("registerBox").classList.add("hidden");
     document.getElementById("loginBox").classList.remove("hidden");
+    document.getElementById("loginError").textContent = "";
 }
 
-// REGISTER
+// REGISTER - Just saves to localStorage (optional)
 document.getElementById("registerForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -34,26 +34,21 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
         return;
     }
 
-    users.push({ username, email, mobile, password });
     alert("Account Created Successfully!");
-
+    document.getElementById("registerForm").reset();
     showLogin();
 });
 
-// LOGIN
+// LOGIN - Accepts ANY username/password and goes to dashboard
 document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
-    const error = document.getElementById("loginError");
 
-    const user = users.find(u => u.username === username && u.password === password);
-
-    if (user) {
-        alert("Login Successful!");
-        // window.location.href = "dashboard.html";
-    } else {
-        error.textContent = "Invalid username or password!";
-    }
+    // Save username to show on dashboard
+    localStorage.setItem('currentUser', username);
+    
+    // Go directly to dashboard - NO validation!
+    window.location.href = "dashboard.html";
 });
