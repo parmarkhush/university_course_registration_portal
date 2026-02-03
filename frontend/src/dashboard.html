@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - University Portal</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+    
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>University Portal</h2>
+        <div class="user-info">
+            <p id="welcomeUser">Welcome, User!</p>
+        </div>
+        <ul class="menu">
+            <li class="active" onclick="showSection('courses')">My Courses</li>
+            <li onclick="showSection('newcourses')">New Courses</li>
+            <li onclick="logout()">Logout</li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- MY COURSES SECTION -->
+        <div class="content-section" id="coursesSection">
+            <h1>My Enrolled Courses</h1>
+            <div id="myCoursesList" class="course-grid"></div>
+        </div>
+
+        <!-- NEW COURSES SECTION -->
+        <div class="content-section hidden" id="newcoursesSection">
+            <h1>Available Courses</h1>
+            <div id="newCoursesList" class="course-grid"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
