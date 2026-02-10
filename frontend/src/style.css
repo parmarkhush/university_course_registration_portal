@@ -8,66 +8,88 @@
 /* body of the pg. */
 body {       
     height: 100vh;
-    background: linear-gradient(to right, #002147, #004e92);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .container {
-    width: 360px;
+    width: 370px;
 }
 
 .form-box {
     background: white;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     text-align: center;
 }
 
 .form-box h2 { 
-    margin-bottom: 20px;
-    color: #002147;
+    margin-bottom: 25px;
+    color: #1a1a2e;
+    font-size: 26px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .form-box input {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
 }
 
 .form-box button {
     width: 100%;
-    padding: 10px;
-    background: #002147;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
 }
 
 .form-box button:hover {
-    background: #00152f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .switch {
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 14px;
+    color: #666;
 }
 
 .switch span {
-    color: #004e92;
+    color: #667eea;
     cursor: pointer;
     font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.switch span:hover {
+    color: #764ba2;
 }
 
 .error {
-    margin-top: 10px;
-    color: red;
+    margin-top: 12px;
+    color: #e74c3c;
     font-size: 14px;
 }
 
