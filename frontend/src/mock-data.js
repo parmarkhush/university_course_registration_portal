@@ -1,5 +1,6 @@
 // Mock Data for University Portal
 // This structure is backend-ready for easy API integration later
+//this is mock data
 
 const mockData = {
     // Sample courses data
