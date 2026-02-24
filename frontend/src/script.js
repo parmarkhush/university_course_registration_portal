@@ -1,51 +1,31 @@
-// Switch to Register
-function showRegister() {
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("registerBox").classList.remove("hidden");
-    document.getElementById("registerError").textContent = "";
-}
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+const DEMO_SESSION_MS = 10 * 60 * 1000;
 
-// Switch to Login
-function showLogin() {
-    document.getElementById("registerBox").classList.add("hidden");
-    document.getElementById("loginBox").classList.remove("hidden");
-    document.getElementById("loginError").textContent = "";
-}
+portalDataService.init();
 
-// REGISTER - Just saves to localStorage (optional)
-document.getElementById("registerForm").addEventListener("submit", function(e) {
+loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const email = document.getElementById("regEmail").value;
-    const mobile = document.getElementById("regMobile").value;
-    const error = document.getElementById("registerError");
+    const rollNumber = document.getElementById('loginRoll').value;
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
 
-    // Mobile validation (10 digits)
-    if (!/^\d{10}$/.test(mobile)) {
-        error.textContent = "Mobile number must be exactly 10 digits!";
+    let user = portalDataService.authenticate(rollNumber, email, password);
+    const state = portalDataService.read();
+    const normalizedRoll = rollNumber.trim().toUpperCase();
+
+    if (!user) {
+        user = state.users.find(item => item.rollNumber.toUpperCase() === normalizedRoll) || null;
+    }
+
+    if (!user) {
+        loginError.textContent = 'Invalid roll number.';
         return;
     }
 
-    // Email validation
-    if (!email.includes("@")) {
-        error.textContent = "Enter a valid email ID!";
-        return;
-    }
-
-    alert("Account Created Successfully!");
-    document.getElementById("registerForm").reset();
-    showLogin();
-});
-
-// LOGIN - Accepts ANY username/password and goes to dashboard
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const username = document.getElementById("loginUsername").value;
-
-    // Save username to show on dashboard
-    localStorage.setItem('currentUser', username);
-    
-    // Go directly to dashboard - NO validation!
-    window.location.href = "dashboard.html";
+    loginError.textContent = 'Demo mode: email/password ignored, session active for 10 minutes.';
+    localStorage.setItem('currentUserId', String(user.id));
+    localStorage.setItem('sessionExpiresAt', String(Date.now() + DEMO_SESSION_MS));
+    window.location.href = 'dashboard.html';
 });
