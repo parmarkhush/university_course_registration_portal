@@ -1,6 +1,5 @@
 // Mock Data for University Portal
 // This structure is backend-ready for easy API integration later
-//this is mock data
 
 const mockData = {
     // Sample courses data
@@ -14,7 +13,9 @@ const mockData = {
             enrolledCount: 0,
             department: 'Computer Science',
             credits: 4,
-            duration: '12 weeks'
+            duration: '12 weeks',
+            prerequisites: [],
+            timeSlot: 'Mon-Wed 09:00-10:30'
         },
         {
             id: 2,
@@ -25,7 +26,9 @@ const mockData = {
             enrolledCount: 0,
             department: 'Computer Science',
             credits: 3,
-            duration: '10 weeks'
+            duration: '10 weeks',
+            prerequisites: [],
+            timeSlot: 'Tue-Thu 11:00-12:30'
         },
         {
             id: 3,
@@ -36,7 +39,9 @@ const mockData = {
             enrolledCount: 0,
             department: 'Information Technology',
             credits: 4,
-            duration: '12 weeks'
+            duration: '12 weeks',
+            prerequisites: [1],
+            timeSlot: 'Mon-Wed 11:00-12:30'
         },
         {
             id: 4,
@@ -47,7 +52,9 @@ const mockData = {
             enrolledCount: 0,
             department: 'Computer Science',
             credits: 4,
-            duration: '14 weeks'
+            duration: '14 weeks',
+            prerequisites: [1, 3],
+            timeSlot: 'Tue-Thu 09:00-10:30'
         },
         {
             id: 5,
@@ -58,7 +65,9 @@ const mockData = {
             enrolledCount: 0,
             department: 'Computer Science',
             credits: 3,
-            duration: '10 weeks'
+            duration: '10 weeks',
+            prerequisites: [1],
+            timeSlot: 'Mon-Wed 14:00-15:30'
         },
         {
             id: 6,
@@ -69,7 +78,9 @@ const mockData = {
             enrolledCount: 0,
             department: 'Computer Science',
             credits: 4,
-            duration: '12 weeks'
+            duration: '12 weeks',
+            prerequisites: [2],
+            timeSlot: 'Tue-Thu 14:00-15:30'
         }
     ],
 
@@ -78,18 +89,92 @@ const mockData = {
         {
             id: 1,
             username: 'student1',
+            name: 'Aarav Mehta',
             email: 'student1@university.edu',
             mobile: '1234567890',
             password: 'password123',
-            rollNumber: 'CS2024001'
+            rollNumber: 'CS2024001',
+            cpi: 9.35,
+            preferredCourse: 'Machine Learning',
+            completedCourseIds: [1, 2, 3],
+            maxCredits: 21,
+            baseCredits: 9,
+            hasHold: false
         },
         {
             id: 2,
             username: 'student2',
+            name: 'Ishita Verma',
             email: 'student2@university.edu',
             mobile: '9876543210',
             password: 'password123',
-            rollNumber: 'CS2024002'
+            rollNumber: 'CS2024002',
+            cpi: 8.91,
+            preferredCourse: 'Data Structures',
+            completedCourseIds: [1],
+            maxCredits: 18,
+            baseCredits: 12,
+            hasHold: false
+        },
+        {
+            id: 3,
+            username: 'student3',
+            name: 'Rohan Kulkarni',
+            email: 'student3@university.edu',
+            mobile: '1112223333',
+            password: 'password123',
+            rollNumber: 'CS2024003',
+            cpi: 9.35,
+            preferredCourse: 'Machine Learning',
+            completedCourseIds: [1, 3],
+            maxCredits: 21,
+            baseCredits: 15,
+            hasHold: false
+        },
+        {
+            id: 4,
+            username: 'student4',
+            name: 'Neha Sharma',
+            email: 'student4@university.edu',
+            mobile: '2223334444',
+            password: 'password123',
+            rollNumber: 'CS2024004',
+            cpi: 8.72,
+            preferredCourse: 'Web Development',
+            completedCourseIds: [1, 2],
+            maxCredits: 18,
+            baseCredits: 15,
+            hasHold: true
+        },
+        {
+            id: 5,
+            username: 'student5',
+            name: 'Kabir Nair',
+            email: 'student5@university.edu',
+            mobile: '3334445555',
+            password: 'password123',
+            rollNumber: 'CS2024005',
+            cpi: 9.02,
+            preferredCourse: 'Database Systems',
+            completedCourseIds: [1, 2, 3],
+            maxCredits: 24,
+            baseCredits: 6,
+            hasHold: false
+        },
+        {
+            id: 6,
+            username: 'student6',
+            name: 'Priya Das',
+            email: 'student6@university.edu',
+            mobile: '4445556666',
+            password: 'password123',
+            rollNumber: 'CS2024006',
+            cpi: 8.72,
+            preferredCourse: 'Computer Networks',
+            completedCourseIds: [1],
+            maxCredits: 20,
+            baseCredits: 10,
+            hasHold: false
         }
     ],
 
@@ -125,6 +210,30 @@ const dataService = {
         return mockData.enrollments
             .filter(e => e.userId === userId)
             .map(e => e.courseId);
+    },
+
+    // Get user by username
+    getUserByUsername(username) {
+        return mockData.users.find(user => user.username === username) || null;
+    },
+
+    // Get all students sorted by CPI with rank
+    getRankedStudents() {
+        const sorted = [...mockData.users].sort((a, b) => b.cpi - a.cpi || a.rollNumber.localeCompare(b.rollNumber));
+        let rank = 0;
+        let previousCpi = null;
+
+        return sorted.map((student, index) => {
+            if (student.cpi !== previousCpi) {
+                rank = index + 1;
+                previousCpi = student.cpi;
+            }
+
+            return {
+                ...student,
+                rank
+            };
+        });
     },
 
     // Enroll in course

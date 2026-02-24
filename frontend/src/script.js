@@ -16,10 +16,8 @@ function showLogin() {
 document.getElementById("registerForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const username = document.getElementById("regUsername").value;
     const email = document.getElementById("regEmail").value;
     const mobile = document.getElementById("regMobile").value;
-    const password = document.getElementById("regPassword").value;
     const error = document.getElementById("registerError");
 
     // Mobile validation (10 digits)
@@ -44,7 +42,6 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
     const username = document.getElementById("loginUsername").value;
-    const password = document.getElementById("loginPassword").value;
 
     // Save username to show on dashboard
     localStorage.setItem('currentUser', username);
