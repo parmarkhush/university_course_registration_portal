@@ -2,52 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-
-    <!-- LOGIN FORM -->
-    <div class="form-box" id="loginBox">
-        <h2>University Login</h2>
-
-        <form id="loginForm">
-            <input type="text" id="loginUsername" placeholder="Username" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-
-        <p class="switch">
-                        Don't have an account?
-            <span onclick="showRegister()">Create Account</span>
+<main class="auth-shell">
+    <section class="hero-panel" aria-label="Portal introduction">
+        <div class="theme-toggle-wrap">
+            <div class="theme-switch" id="themeSwitch" aria-label="Choose theme" role="group">
+                <button type="button" class="theme-option" data-theme-choice="light">Light</button>
+                <button type="button" class="theme-option" data-theme-choice="dark">Dark</button>
+            </div>
+        </div>
+        <p class="eyebrow">University Course Registration Portal</p>
+        <h1>Register for courses without the usual confusion.</h1>
+        <p class="hero-copy">
+            Browse available subjects, manage your academic plan, track attendance, and stay updated on registration activity in one place.
         </p>
+        <ul class="hero-points">
+            <li>Real-time course availability</li>
+            <li>Waitlist and notification support</li>
+            <li>Responsive student dashboard</li>
+        </ul>
+    </section>
 
-        <p class="error" id="loginError"></p>
+    <div class="container">
+        <section class="form-box" id="loginBox" aria-labelledby="loginTitle">
+            <p class="form-eyebrow">Student Access</p>
+            <h2 id="loginTitle">University Login</h2>
+
+            <form id="loginForm">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username" required>
+
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
+
+                <button type="submit">Login</button>
+            </form>
+
+            <p class="switch">
+                Don't have an account?
+                <button type="button" class="text-link" onclick="showRegister()">Create Account</button>
+            </p>
+
+            <p class="error" id="loginError" aria-live="polite"></p>
+        </section>
+
+        <section class="form-box hidden" id="registerBox" aria-labelledby="registerTitle">
+            <p class="form-eyebrow">New Student</p>
+            <h2 id="registerTitle">Create Account</h2>
+
+            <form id="registerForm">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Choose a username" autocomplete="username" required>
+
+                <label for="regEmail">Email ID</label>
+                <input type="email" id="regEmail" placeholder="name@university.edu" autocomplete="email" required>
+
+                <label for="regMobile">Mobile Number</label>
+                <input type="text" id="regMobile" placeholder="10-digit mobile number" inputmode="numeric" required>
+
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Create a password" autocomplete="new-password" required>
+
+                <button type="submit">Register</button>
+            </form>
+
+            <p class="switch">
+                Already have an account?
+                <button type="button" class="text-link" onclick="showLogin()">Login</button>
+            </p>
+
+            <p class="error" id="registerError" aria-live="polite"></p>
+        </section>
     </div>
-
-    <!-- REGISTER FORM -->
-    <div class="form-box hidden" id="registerBox">
-        <h2>Create Account</h2>
-
-        <form id="registerForm">
-            <input type="text" id="regUsername" placeholder="Username" required>
-            <input type="email" id="regEmail" placeholder="Email ID" required>
-            <input type="text" id="regMobile" placeholder="Mobile Number" required>
-            <input type="password" id="regPassword" placeholder="Password" required>
-            <button type="submit">Register</button>
-        </form>
-
-        <p class="switch">
-            Already have an account?
-            <span onclick="showLogin()">Login</span>
-        </p>
-
-        <p class="error" id="registerError"></p>
-    </div>
-
-</div>
+</main>
 
 <script src="script.js"></script>
 </body>

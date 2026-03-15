@@ -1,3 +1,24 @@
+const THEME_STORAGE_KEY = 'portalTheme';
+
+function applyTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    document.querySelectorAll('.theme-option').forEach(button => {
+        const isActive = button.dataset.themeChoice === theme;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+}
+
+function initializeTheme() {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+    applyTheme(savedTheme);
+}
+
+function setTheme(theme) {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    applyTheme(theme);
+}
+
 // Switch to Register
 function showRegister() {
     document.getElementById("loginBox").classList.add("hidden");
@@ -48,4 +69,9 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     
     // Go directly to dashboard - NO validation!
     window.location.href = "dashboard.html";
+});
+
+initializeTheme();
+document.querySelectorAll('.theme-option').forEach(button => {
+    button.addEventListener('click', () => setTheme(button.dataset.themeChoice));
 });

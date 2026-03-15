@@ -1,52 +1,131 @@
-# university_course_registration_portal
-The University Course Registration Portal is an online system that allows students to view and register for courses each semester. It simplifies the registration process, reduces errors, and saves time for students and administrators through a secure and user-friendly interface.
+# University Course Registration Portal
 
-The University Course Registration Portal is a web-based application designed to simplify and automate the academic course enrollment process for students and administrators. The portal provides a centralized platform where students can view available courses, register for subjects each semester, and manage their academic schedules efficiently.
+The University Course Registration Portal is a web-based application that helps students browse available courses, plan schedules, and register online. It also gives faculty and administrators a simple way to monitor enrollments, manage courses, and review academic information.
 
-Students can log in securely to the system to access detailed information about courses, including course codes, titles, credits, instructors, and seat availability. The portal ensures that students register only for eligible courses by validating prerequisites, credit limits, and timetable conflicts in real time.
+## Project Purpose
 
-For faculty and administrators, the portal offers tools to manage course offerings, monitor student enrollments, update course details, and generate academic reports. The system reduces manual paperwork, minimizes registration errors, and improves transparency in the registration process.
+This project is designed to:
 
-Overall, the University Course Registration Portal enhances operational efficiency, saves time for both students and staff, and provides a reliable, user-friendly interface for managing academic course registrations.
+- allow students to view and register for university courses online
+- reduce manual administrative work during registration periods
+- help faculty and administrators manage course offerings and seat availability
+- support a clearer and more efficient registration experience
 
-2. purpose of the system
+## Stakeholders
 
--student can view the courses that are offered by the university
--student can register the courses online 
--reduces administration work
--admin or faculty can manage the offer courses and its vacancy efficiently
--enroll the courses by the students ranking and his choice
+- Students
+- Faculty Advisors
+- Registrar Staff
+- Department Administrators
+- System Administrators
+- University Administration
 
-3.stakeholders
+## Current Features in the Frontend
 
--students
--admin
--faculty
+- user login and registration
+- student profile form with CPI and preferred course selection
+- student overview with advisor, registration, and payment status
+- available course listing with search, filters, sorting, and seat counts
+- course enrollment and unenrollment
+- waitlist support for full courses
+- notifications for registration and waitlist updates
+- weekly schedule summary for enrolled courses
+- registration rule checks for holds, prerequisites, schedule conflicts, and credit limits
+- attendance dashboard
+- student ranking view
 
-4.functional requirement
+## Software Requirements Specification Summary
 
--The system shall allow students to login using their email and password
--the system shall allow students to search for courses using name of courses
--if the courses offered are enrolled than student can pay fees using this online portal
--if the course offered to student is not respond than it will offer to the other student
--if the course is offered to student than an email is send to student
--the student can see the last year courses and his ranking
--there are three round for the course registration if one student doesn't get any courses in the first round than they will automatically apper for the next round
--the admin can manage the vacancy for the courses
--admin can block a user account.
+The portal SRS is organized into the following major sections:
 
+### 1. Introduction
 
-5.non function requirement
+- Purpose
+- Document Conventions
+- Intended Audience
+- Project Scope
+- References
 
--performance: search courses must load within 5 seconds
--security: strog password can be generate automatically for the user
--availability: the system should be available for 24/7 for the students
--scalability : the database must support up to 10000 students
--usability : the ui should be responsive only in laptop 
+### 2. Overall Description
 
-6.constraints
+- Product Perspective
+- Product Functions
+- User Classes, Characteristics, and Needs
+- Operating Environment
+- Design and Implementation Constraints
+- User Documentation
+- Assumptions and Dependencies
 
-⦁	student can register only once using a unique email
-⦁	student cannot register for the same course more than once.
-⦁	student require a network connection for the use of this portal.
-⦁	if student rejected one course than that course do not reappear for the studnet.
+### 3. System Features and Functional Requirements
+
+- User Management and Authentication
+- Course Catalog Management
+- Registration Management
+- Schedule Management
+- Academic Advising Support
+- Waitlist Management
+- Payment Integration
+- Reporting and Analytics
+- Notification System
+- Content Management
+
+### 4. External Interface Requirements
+
+- User Interfaces
+- Hardware Interfaces
+- Software Interfaces
+- Communications Interfaces
+
+### 5. Non-Functional Requirements
+
+- Performance Requirements
+- Security Requirements
+- Reliability and Availability
+- Usability and Accessibility
+- Maintainability and Portability
+- Legal and Compliance Requirements
+- Operational Requirements
+
+### 6. Other Requirements
+
+- Data Migration
+- Internationalization Requirements
+- Training Requirements
+
+### Appendices
+
+- Appendix A: Analysis Models
+- Appendix B: Issues List
+
+## Key Functional Requirement Areas
+
+- SSO-based authentication and role-based access control
+- course catalog browsing with search, filters, and availability
+- registration validation for prerequisites, credit limits, and time conflicts
+- add, drop, and withdrawal workflows
+- schedule builder and weekly schedule view
+- academic advising and approval support
+- waitlist processing and notifications
+- reports, announcements, and administrative controls
+
+## Key Non-Functional Requirement Areas
+
+- fast page loads and responsive registration flows
+- secure handling of sensitive information
+- high availability during peak registration periods
+- WCAG-aligned accessibility support
+- scalable and maintainable system design
+
+## Documentation Files Included
+
+- `SRS.docx`
+- `Sequence_Diagram.png`
+- `Activity_Diagram.png`
+- `Class_Diagram.jpeg`
+- `Component diagram.jpeg`
+- `Deployment diagram.jpeg`
+
+## Notes
+
+- The detailed SRS remains available in `SRS.docx`.
+- The web portal now reflects several SRS requirements directly in the UI instead of showing the SRS as a dashboard section.
