@@ -1,6 +1,8 @@
 // Check if user is logged in
 const currentUser = localStorage.getItem('currentUser');
 const THEME_STORAGE_KEY = 'portalTheme';
+let currentUserRecordCache = null;
+let currentStudentProfileCache = null;
 
 if (!currentUser) {
     // If no user, redirect to login
@@ -8,6 +10,54 @@ if (!currentUser) {
 } else {
     // Display username
     document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser}!`;
+}
+
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+            ...(options.headers || {})
+        },
+        ...options
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw new Error(data.message || 'Request failed.');
+    }
+
+    return data;
+}
+
+function showStudentFormMessage(text, type) {
+    const message = document.getElementById('studentFormMessage');
+    if (!message) {
+        return;
+    }
+
+    message.textContent = text;
+    message.classList.remove('success', 'error');
+    if (type) {
+        message.classList.add(type);
+    }
+}
+
+async function initializeDashboardData() {
+    try {
+        const [{ user }, { profile }] = await Promise.all([
+            apiRequest(`/api/users/${encodeURIComponent(currentUser)}`),
+            apiRequest(`/api/students/${encodeURIComponent(currentUser)}`)
+        ]);
+
+        currentUserRecordCache = user;
+        currentStudentProfileCache = profile;
+    } catch (error) {
+        currentUserRecordCache = typeof dataService !== 'undefined' && typeof dataService.getUserByUsername === 'function'
+            ? dataService.getUserByUsername(currentUser)
+            : null;
+        currentStudentProfileCache = null;
+        showStudentFormMessage(`Backend sync unavailable: ${error.message}`, 'error');
+    }
 }
 
 // Initialize courses from mock data (backend-ready structure)
@@ -97,6 +147,127 @@ const PORTAL_STATE = {
     sortBy: 'name'
 };
 
+const ACADEMIC_CALENDAR = {
+    title: 'Pandit Deendayal Energy University Academic Calendar',
+    location: 'Gandhinagar, Gujarat, India',
+    sourceLabel: 'Official PDEU Academic Calendar 2024-25 for FoET/FoLS',
+    sourceUrl: 'https://api.pdeu.ac.in/pdeu-docs/academics/AcademicCalendarFOETFOLS.pdf',
+    highlights: [
+        { label: 'Monsoon / Odd Semester Starts', value: '21 July 2025' },
+        { label: 'Diwali Break', value: '20 to 24 October 2025' },
+        { label: 'Winter Break', value: '22 to 26 December 2025' },
+        { label: 'Mid Semester Exam', value: '15 to 20 September 2025' },
+        { label: 'End Semester Practical', value: '17 to 22 November 2025' },
+        { label: 'End Semester Theory', value: '24 November to 6 December 2025' },
+        { label: 'Spring / Even Semester Starts', value: '5 January 2026' },
+        { label: 'Even Semester End Exam', value: '11 to 23 May 2026' },
+        { label: 'Summer Vacation', value: '1 June to 10 July 2026' }
+    ],
+    monthRange: {
+        start: { year: 2025, month: 6 },
+        end: { year: 2026, month: 6 }
+    },
+    eventTypes: {
+        classes: 'Classes',
+        exam: 'Exam',
+        practical: 'Practical',
+        result: 'Result',
+        leave: 'Leave'
+    },
+    events: [
+        {
+            title: 'Odd Semester Classes Begin',
+            start: '2025-07-21',
+            end: '2025-07-21',
+            type: 'classes'
+        },
+        {
+            title: 'Independence Day Celebration',
+            start: '2025-08-15',
+            end: '2025-08-15',
+            type: 'leave'
+        },
+        {
+            title: 'Odd Mid Semester Examination',
+            start: '2025-09-15',
+            end: '2025-09-20',
+            type: 'exam'
+        },
+        {
+            title: 'Diwali Break',
+            start: '2025-10-20',
+            end: '2025-10-24',
+            type: 'leave'
+        },
+        {
+            title: 'Odd End Semester Practical Examination',
+            start: '2025-11-17',
+            end: '2025-11-22',
+            type: 'practical'
+        },
+        {
+            title: 'Odd End Semester Theory Examination',
+            start: '2025-11-24',
+            end: '2025-12-06',
+            type: 'exam'
+        },
+        {
+            title: 'Odd Semester Result Declaration',
+            start: '2025-12-08',
+            end: '2025-12-08',
+            type: 'result'
+        },
+        {
+            title: 'Winter Break',
+            start: '2025-12-22',
+            end: '2025-12-26',
+            type: 'leave'
+        },
+        {
+            title: 'Even Semester Classes Begin',
+            start: '2026-01-05',
+            end: '2026-01-05',
+            type: 'classes'
+        },
+        {
+            title: 'Republic Day Celebration',
+            start: '2026-01-26',
+            end: '2026-01-26',
+            type: 'leave'
+        },
+        {
+            title: 'Even Mid Semester Examination',
+            start: '2026-03-09',
+            end: '2026-03-14',
+            type: 'exam'
+        },
+        {
+            title: 'Even End Semester Practical Examination',
+            start: '2026-05-04',
+            end: '2026-05-09',
+            type: 'practical'
+        },
+        {
+            title: 'Even End Semester Theory Examination',
+            start: '2026-05-11',
+            end: '2026-05-23',
+            type: 'exam'
+        },
+        {
+            title: 'Even Semester Result Declaration',
+            start: '2026-05-26',
+            end: '2026-05-26',
+            type: 'result'
+        },
+        {
+            title: 'Summer Vacation',
+            start: '2026-06-01',
+            end: '2026-07-10',
+            type: 'leave'
+        }
+    ]
+};
+
 function applyTheme(theme) {
     document.body.setAttribute('data-theme', theme);
     document.querySelectorAll('.theme-option').forEach(button => {
@@ -144,6 +315,9 @@ function showSection(section) {
     } else if (section === 'notifications') {
         document.getElementById('notificationsSection').classList.remove('hidden');
         loadNotifications();
+    } else if (section === 'calendar') {
+        document.getElementById('calendarSection').classList.remove('hidden');
+        loadAcademicCalendar();
     } else if (section === 'attendance') {
         document.getElementById('attendanceSection').classList.remove('hidden');
         loadAttendance();
@@ -171,12 +345,15 @@ function populateCourseOptions() {
 }
 
 function loadStudentProfile() {
-    const saved = localStorage.getItem(`studentProfile:${currentUser}`);
-    if (!saved) {
+    const data = getCurrentUserProfile();
+    if (!data) {
+        document.getElementById('studentName').value = '';
+        document.getElementById('studentRoll').value = '';
+        document.getElementById('studentGender').value = '';
+        document.getElementById('studentCpi').value = '';
         updateRankMessage();
         return;
     }
-    const data = JSON.parse(saved);
     document.getElementById('studentName').value = data.name || '';
     document.getElementById('studentRoll').value = data.rollNo || '';
     document.getElementById('studentGender').value = data.gender || '';
@@ -192,6 +369,9 @@ function loadStudentProfile() {
 }
 
 function getCurrentUserRecord() {
+    if (currentUserRecordCache) {
+        return currentUserRecordCache;
+    }
     if (typeof dataService !== 'undefined' && typeof dataService.getUserByUsername === 'function') {
         return dataService.getUserByUsername(currentUser);
     }
@@ -204,8 +384,7 @@ function getCourseById(courseId) {
 }
 
 function getCurrentUserProfile() {
-    const saved = localStorage.getItem(`studentProfile:${currentUser}`);
-    return saved ? JSON.parse(saved) : null;
+    return currentStudentProfileCache;
 }
 
 function getAdvisorDetails() {
@@ -492,18 +671,24 @@ function loadAttendance() {
     }).join('');
 }
 
-function loadStudentRanking() {
+async function loadStudentRanking() {
     const tableBody = document.getElementById('rankingTableBody');
     if (!tableBody) {
         return;
     }
 
-    const rankedStudents = typeof dataService !== 'undefined' && typeof dataService.getRankedStudents === 'function'
-        ? dataService.getRankedStudents()
-        : [];
+    let rankedStudents = [];
+    try {
+        const data = await apiRequest('/api/students');
+        rankedStudents = data.students || [];
+    } catch (error) {
+        rankedStudents = typeof dataService !== 'undefined' && typeof dataService.getRankedStudents === 'function'
+            ? dataService.getRankedStudents()
+            : [];
+    }
 
     if (rankedStudents.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5">No mock student data available.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5">No student data available.</td></tr>';
         return;
     }
 
@@ -850,6 +1035,127 @@ function loadNotifications() {
     markNotificationsRead();
 }
 
+function loadAcademicCalendar() {
+    const intro = document.getElementById('calendarIntro');
+    const highlights = document.getElementById('calendarHighlights');
+    const legend = document.getElementById('calendarLegend');
+    const months = document.getElementById('calendarMonths');
+    const timeline = document.getElementById('calendarTimeline');
+
+    if (!intro || !highlights || !legend || !months || !timeline) {
+        return;
+    }
+
+    intro.innerHTML = `
+        <div class="schedule-card">
+            <h3>${ACADEMIC_CALENDAR.title}</h3>
+            <p>${ACADEMIC_CALENDAR.location}</p>
+            <p>Source: <a href="${ACADEMIC_CALENDAR.sourceUrl}" target="_blank" rel="noopener noreferrer">${ACADEMIC_CALENDAR.sourceLabel}</a></p>
+            <p>This view shows key semester milestones so students can quickly check important academic dates.</p>
+        </div>
+    `;
+
+    highlights.innerHTML = ACADEMIC_CALENDAR.highlights.map(item => `
+        <div class="overview-card">
+            <h3>${item.label}</h3>
+            <p><strong>${item.value}</strong></p>
+        </div>
+    `).join('');
+
+    legend.innerHTML = Object.entries(ACADEMIC_CALENDAR.eventTypes).map(([key, label]) => `
+        <span class="calendar-legend-item ${key}">
+            <span class="calendar-legend-dot"></span>${label}
+        </span>
+    `).join('');
+
+    months.innerHTML = buildAcademicCalendarMonths();
+
+    timeline.innerHTML = ACADEMIC_CALENDAR.events.map(event => `
+        <div class="schedule-card calendar-card">
+            <h3>${event.title}</h3>
+            <p><strong>${formatEventDateRange(event.start, event.end)}</strong></p>
+            <p class="calendar-type ${event.type}">${ACADEMIC_CALENDAR.eventTypes[event.type]}</p>
+        </div>
+    `).join('');
+}
+
+function buildAcademicCalendarMonths() {
+    const monthCards = [];
+    const { start, end } = ACADEMIC_CALENDAR.monthRange;
+    const cursor = new Date(start.year, start.month, 1);
+    const finalDate = new Date(end.year, end.month, 1);
+
+    while (cursor <= finalDate) {
+        monthCards.push(renderMonthCard(cursor.getFullYear(), cursor.getMonth()));
+        cursor.setMonth(cursor.getMonth() + 1);
+    }
+
+    return monthCards.join('');
+}
+
+function renderMonthCard(year, month) {
+    const monthDate = new Date(year, month, 1);
+    const monthName = monthDate.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+    const firstWeekday = monthDate.getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const cells = [];
+
+    weekdayLabels.forEach(day => {
+        cells.push(`<div class="day-head">${day}</div>`);
+    });
+
+    for (let i = 0; i < firstWeekday; i++) {
+        cells.push('<div class="day-cell empty" aria-hidden="true"></div>');
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const isoDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayEvents = getEventsForDate(isoDate);
+        const badges = dayEvents.slice(0, 2).map(event => `
+            <span class="calendar-chip ${event.type}" title="${event.title}">${ACADEMIC_CALENDAR.eventTypes[event.type]}</span>
+        `).join('');
+        const extraCount = dayEvents.length > 2 ? `<span class="calendar-chip more">+${dayEvents.length - 2}</span>` : '';
+        const eventClass = dayEvents.length ? `has-event ${dayEvents[0].type}` : '';
+
+        cells.push(`
+            <div class="day-cell ${eventClass}">
+                <span class="day-number">${day}</span>
+                <div class="day-events">
+                    ${badges}
+                    ${extraCount}
+                </div>
+            </div>
+        `);
+    }
+
+    return `
+        <section class="month-card">
+            <div class="month-header">${monthName}</div>
+            <div class="month-grid">
+                ${cells.join('')}
+            </div>
+        </section>
+    `;
+}
+
+function getEventsForDate(isoDate) {
+    const target = new Date(`${isoDate}T00:00:00`);
+    return ACADEMIC_CALENDAR.events.filter(event => {
+        const start = new Date(`${event.start}T00:00:00`);
+        const end = new Date(`${event.end}T00:00:00`);
+        return target >= start && target <= end;
+    });
+}
+
+function formatEventDateRange(startIso, endIso) {
+    const start = new Date(`${startIso}T00:00:00`);
+    const end = new Date(`${endIso}T00:00:00`);
+    const startLabel = start.toLocaleString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    const endLabel = end.toLocaleString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    return startIso === endIso ? startLabel : `${startLabel} to ${endLabel}`;
+}
+
 // Logout
 function logout() {
     localStorage.removeItem('currentUser');
@@ -857,7 +1163,7 @@ function logout() {
 }
 
 // Student form handler
-document.getElementById('studentForm').addEventListener('submit', function(e) {
+document.getElementById('studentForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const preferredCourses = Array.from(document.getElementById('studentCourses').selectedOptions)
@@ -872,15 +1178,24 @@ document.getElementById('studentForm').addEventListener('submit', function(e) {
         preferredCourses
     };
 
-    localStorage.setItem(`studentProfile:${currentUser}`, JSON.stringify(studentData));
+    try {
+        const response = await apiRequest(`/api/students/${encodeURIComponent(currentUser)}`, {
+            method: 'PUT',
+            body: JSON.stringify(studentData)
+        });
 
-    const message = document.getElementById('studentFormMessage');
-    message.textContent = 'Student info saved successfully.';
-    message.classList.add('success');
-    message.classList.remove('error');
-    updateRankMessage();
-    if (!document.getElementById('newcoursesSection').classList.contains('hidden')) {
-        loadNewCourses();
+        currentStudentProfileCache = response.profile;
+        showStudentFormMessage('Student info saved successfully to MySQL.', 'success');
+        updateRankMessage();
+        renderStudentOverview();
+        if (!document.getElementById('newcoursesSection').classList.contains('hidden')) {
+            loadNewCourses();
+        }
+        if (!document.getElementById('rankingSection').classList.contains('hidden')) {
+            loadStudentRanking();
+        }
+    } catch (error) {
+        showStudentFormMessage(error.message, 'error');
     }
 });
 
@@ -918,5 +1233,7 @@ initializeTheme();
 document.querySelectorAll('.theme-option').forEach(button => {
     button.addEventListener('click', () => setTheme(button.dataset.themeChoice));
 });
-showSection('student');
+initializeDashboardData().finally(() => {
+    showSection('student');
+});
 

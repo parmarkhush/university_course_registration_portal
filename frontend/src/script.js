@@ -1,5 +1,22 @@
 const THEME_STORAGE_KEY = 'portalTheme';
 
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+            ...(options.headers || {})
+        },
+        ...options
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw new Error(data.message || 'Request failed.');
+    }
+
+    return data;
+}
+
 function applyTheme(theme) {
     document.body.setAttribute('data-theme', theme);
     document.querySelectorAll('.theme-option').forEach(button => {
@@ -33,13 +50,17 @@ function showLogin() {
     document.getElementById("loginError").textContent = "";
 }
 
-// REGISTER - Just saves to localStorage (optional)
-document.getElementById("registerForm").addEventListener("submit", function(e) {
+// REGISTER - saves user to MySQL through backend API
+document.getElementById("registerForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
+    const username = document.getElementById("regUsername").value.trim();
     const email = document.getElementById("regEmail").value;
     const mobile = document.getElementById("regMobile").value;
+    const password = document.getElementById("regPassword").value;
     const error = document.getElementById("registerError");
+
+    error.textContent = "";
 
     // Mobile validation (10 digits)
     if (!/^\d{10}$/.test(mobile)) {
@@ -53,22 +74,41 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
         return;
     }
 
-    alert("Account Created Successfully!");
-    document.getElementById("registerForm").reset();
-    showLogin();
+    try {
+        await apiRequest('/api/auth/register', {
+            method: 'POST',
+            body: JSON.stringify({ username, email, mobile, password })
+        });
+
+        alert("Account Created Successfully!");
+        document.getElementById("registerForm").reset();
+        showLogin();
+    } catch (requestError) {
+        error.textContent = requestError.message;
+    }
 });
 
-// LOGIN - Accepts ANY username/password and goes to dashboard
-document.getElementById("loginForm").addEventListener("submit", function(e) {
+// LOGIN - validates user from MySQL through backend API
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const username = document.getElementById("loginUsername").value;
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const error = document.getElementById("loginError");
 
-    // Save username to show on dashboard
-    localStorage.setItem('currentUser', username);
-    
-    // Go directly to dashboard - NO validation!
-    window.location.href = "dashboard.html";
+    error.textContent = "";
+
+    try {
+        const data = await apiRequest('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+
+        localStorage.setItem('currentUser', data.user.username);
+        window.location.href = "dashboard.html";
+    } catch (requestError) {
+        error.textContent = requestError.message;
+    }
 });
 
 initializeTheme();

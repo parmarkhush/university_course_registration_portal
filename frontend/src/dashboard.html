@@ -29,6 +29,7 @@
                 <li><button class="menu-item" data-section="newcourses" type="button" onclick="showSection('newcourses')">New Courses</button></li>
                 <li><button class="menu-item" data-section="waitlist" type="button" onclick="showSection('waitlist')">Waitlist</button></li>
                 <li><button class="menu-item" data-section="notifications" type="button" onclick="showSection('notifications')">Notifications</button></li>
+                <li><button class="menu-item" data-section="calendar" type="button" onclick="showSection('calendar')">Academic Calendar</button></li>
                 <li><button class="menu-item" data-section="attendance" type="button" onclick="showSection('attendance')">Attendance</button></li>
                 <li><button class="menu-item" data-section="ranking" type="button" onclick="showSection('ranking')">Student Rank List</button></li>
                 <li><button class="menu-item logout-item" type="button" onclick="logout()">Logout</button></li>
@@ -135,6 +136,15 @@
         <div class="content-section hidden" id="notificationsSection">
             <h2>Notifications</h2>
             <div id="notificationsList" class="notifications-list"></div>
+        </div>
+
+        <div class="content-section hidden" id="calendarSection">
+            <h2>PDEU Academic Calendar</h2>
+            <div id="calendarIntro" class="calendar-intro"></div>
+            <div id="calendarHighlights" class="student-overview"></div>
+            <div id="calendarLegend" class="calendar-legend"></div>
+            <div id="calendarMonths" class="calendar-months"></div>
+            <div id="calendarTimeline" class="calendar-grid"></div>
         </div>
 
         <!-- ATTENDANCE SECTION -->

@@ -129,3 +129,19 @@ The portal SRS is organized into the following major sections:
 
 - The detailed SRS remains available in `SRS.docx`.
 - The web portal now reflects several SRS requirements directly in the UI instead of showing the SRS as a dashboard section.
+- Registration, login, and student information can now be connected to a MySQL database through the included Node.js backend.
+
+## MySQL Setup
+
+1. Install MySQL and create the database objects from `mysql-schema.sql`.
+2. Copy `.env.example` to `.env` and fill in your MySQL username, password, host, port, and database name.
+3. Install dependencies with `npm install`.
+4. Start the app with `npm start`.
+5. Open `http://localhost:3000`.
+
+## Stored in MySQL
+
+- registered users from the portal sign-up form
+- login validation against saved users
+- student profile records saved from the dashboard form
+- student ranking data based on saved CPI values
