@@ -1,13 +1,18 @@
 const THEME_STORAGE_KEY = 'portalTheme';
 
 async function apiRequest(url, options = {}) {
-    const response = await fetch(url, {
-        headers: {
-            'Content-Type': 'application/json',
-            ...(options.headers || {})
-        },
-        ...options
-    });
+    let response;
+    try {
+        response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            },
+            ...options
+        });
+    } catch (error) {
+        throw new Error('Cannot reach the server. Make sure `npm start` is running and open the portal from http://localhost:3000.');
+    }
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
