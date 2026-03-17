@@ -2,9 +2,9 @@
   "name": "university-course-registration-portal",
   "version": "1.0.0",
   "description": "University course registration portal with MySQL persistence",
-  "main": "server.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node backend/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

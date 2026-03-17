@@ -125,6 +125,29 @@ The portal SRS is organized into the following major sections:
 - `Component diagram.jpeg`
 - `Deployment diagram.jpeg`
 
+## Project Structure
+
+```text
+university_course_registration_portal/
+|-- backend/
+|   `-- server.js
+|-- database/
+|   |-- mysql-schema.sql
+|   `-- mysql-user-setup.sql
+|-- frontend/
+|   `-- public/
+|       |-- index.html
+|       |-- dashboard.html
+|       |-- style.css
+|       |-- dashboard.css
+|       |-- script.js
+|       `-- dashboard.js
+|-- .env
+|-- .env.example
+|-- package.json
+`-- README.md
+```
+
 ## Notes
 
 - The detailed SRS remains available in `SRS.docx`.
@@ -133,7 +156,7 @@ The portal SRS is organized into the following major sections:
 
 ## MySQL Setup
 
-1. Install MySQL and create the database objects from `mysql-schema.sql`.
+1. Install MySQL and create the database objects from `database/mysql-schema.sql`.
 2. Copy `.env.example` to `.env` and fill in your MySQL username, password, host, port, and database name.
 3. Install dependencies with `npm install`.
 4. Start the app with `npm start`.

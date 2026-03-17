@@ -19,7 +19,7 @@ const pool = mysql.createPool({
 });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'frontend', 'src')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
 function parseJsonArray(value, fallback = []) {
     if (!value) {
@@ -266,11 +266,11 @@ app.get('/api/students', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'src', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'public', 'index.html'));
 });
 
 app.get('/dashboard.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'src', 'dashboard.html'));
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'public', 'dashboard.html'));
 });
 
 app.listen(port, () => {
