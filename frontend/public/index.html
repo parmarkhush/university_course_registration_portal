@@ -23,19 +23,20 @@
         </p>
         <ul class="hero-points">
             <li>Real-time course availability</li>
-            <li>Waitlist and notification support</li>
+            <li>Attendance, marks, and announcement updates</li>
             <li>Responsive student dashboard</li>
         </ul>
+        <p class="hero-copy">Students and faculty now sign in from this same portal using their own email IDs.</p>
     </section>
 
     <div class="container">
         <section class="form-box" id="loginBox" aria-labelledby="loginTitle">
-            <p class="form-eyebrow">Student Access</p>
+            <p class="form-eyebrow">Unified Access</p>
             <h2 id="loginTitle">University Login</h2>
 
             <form id="loginForm">
-                <label for="loginUsername">Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username" required>
+                <label for="loginEmail">Email ID</label>
+                <input type="email" id="loginEmail" placeholder="Enter your student or faculty email" autocomplete="email" required>
 
                 <label for="loginPassword">Password</label>
                 <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
@@ -44,7 +45,7 @@
             </form>
 
             <p class="switch">
-                Don't have an account?
+                Student account not created yet?
                 <button type="button" class="text-link" onclick="showRegister()">Create Account</button>
             </p>
 
@@ -56,11 +57,9 @@
             <h2 id="registerTitle">Create Account</h2>
 
             <form id="registerForm">
-                <label for="regUsername">Username</label>
-                <input type="text" id="regUsername" placeholder="Choose a username" autocomplete="username" required>
-
                 <label for="regEmail">Email ID</label>
-                <input type="email" id="regEmail" placeholder="name@university.edu" autocomplete="email" required>
+                <input type="email" id="regEmail" placeholder="24bcp337@sot.pdpu.ac.in" autocomplete="email" required>
+                <p class="switch">Only approved CS student emails in the format <strong>rollno@sot.pdpu.ac.in</strong> are accepted.</p>
 
                 <label for="regMobile">Mobile Number</label>
                 <input type="text" id="regMobile" placeholder="10-digit mobile number" inputmode="numeric" required>

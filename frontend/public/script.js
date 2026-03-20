@@ -59,9 +59,8 @@ function showLogin() {
 document.getElementById("registerForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const username = document.getElementById("regUsername").value.trim();
-    const email = document.getElementById("regEmail").value;
-    const mobile = document.getElementById("regMobile").value;
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+    const mobile = document.getElementById("regMobile").value.trim();
     const password = document.getElementById("regPassword").value;
     const error = document.getElementById("registerError");
 
@@ -74,15 +73,15 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     }
 
     // Email validation
-    if (!email.includes("@")) {
-        error.textContent = "Enter a valid email ID!";
+    if (!/^[a-z0-9]+@sot\.pdpu\.ac\.in$/i.test(email)) {
+        error.textContent = "Use your college email in the format rollno@sot.pdpu.ac.in";
         return;
     }
 
     try {
         await apiRequest('/api/auth/register', {
             method: 'POST',
-            body: JSON.stringify({ username, email, mobile, password })
+            body: JSON.stringify({ email, mobile, password })
         });
 
         alert("Account Created Successfully!");
@@ -97,7 +96,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const username = document.getElementById("loginUsername").value.trim();
+    const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
     const error = document.getElementById("loginError");
 
@@ -106,11 +105,24 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     try {
         const data = await apiRequest('/api/auth/login', {
             method: 'POST',
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ email, password })
         });
 
-        localStorage.setItem('currentUser', data.user.username);
-        window.location.href = "dashboard.html";
+        if (data.role === 'faculty' && data.faculty) {
+            localStorage.setItem('currentFaculty', JSON.stringify(data.faculty));
+            localStorage.removeItem('currentUser');
+            window.location.href = "faculty.html";
+            return;
+        }
+
+        if (data.role === 'student' && data.user) {
+            localStorage.setItem('currentUser', data.user.username);
+            localStorage.removeItem('currentFaculty');
+            window.location.href = "dashboard.html";
+            return;
+        }
+
+        throw new Error('Unknown login role received from server.');
     } catch (requestError) {
         error.textContent = requestError.message;
     }

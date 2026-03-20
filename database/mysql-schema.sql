@@ -33,3 +33,70 @@ CREATE TABLE IF NOT EXISTS student_profiles (
         FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS faculty_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    faculty_name VARCHAR(150) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    department VARCHAR(120) NOT NULL DEFAULT 'Computer Science',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS attendance_records (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_user_id INT NOT NULL,
+    subject_name VARCHAR(120) NOT NULL,
+    attended_classes INT NOT NULL DEFAULT 0,
+    total_classes INT NOT NULL DEFAULT 0,
+    updated_by_faculty_id INT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_attendance_student
+        FOREIGN KEY (student_user_id) REFERENCES users(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_attendance_faculty
+        FOREIGN KEY (updated_by_faculty_id) REFERENCES faculty_users(id)
+        ON DELETE SET NULL,
+    CONSTRAINT uq_attendance_student_subject UNIQUE (student_user_id, subject_name)
+);
+
+CREATE TABLE IF NOT EXISTS student_marks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_user_id INT NOT NULL,
+    subject_name VARCHAR(120) NOT NULL,
+    score DECIMAL(6,2) NOT NULL DEFAULT 0,
+    max_score DECIMAL(6,2) NOT NULL DEFAULT 100,
+    updated_by_faculty_id INT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_marks_student
+        FOREIGN KEY (student_user_id) REFERENCES users(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_marks_faculty
+        FOREIGN KEY (updated_by_faculty_id) REFERENCES faculty_users(id)
+        ON DELETE SET NULL,
+    CONSTRAINT uq_marks_student_subject UNIQUE (student_user_id, subject_name)
+);
+
+CREATE TABLE IF NOT EXISTS faculty_announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    faculty_user_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    message TEXT NOT NULL,
+    target_roll_no VARCHAR(100) NULL,
+    pdf_file_name VARCHAR(255) NULL,
+    pdf_mime_type VARCHAR(120) NULL,
+    pdf_base64 LONGTEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_announcements_faculty
+        FOREIGN KEY (faculty_user_id) REFERENCES faculty_users(id)
+        ON DELETE CASCADE
+);
+
+INSERT INTO faculty_users (username, faculty_name, email, password, department)
+VALUES ('faculty1', 'Dr. Kavita Shah', 'faculty1@university.edu', 'faculty123', 'Computer Science')
+ON DUPLICATE KEY UPDATE
+    faculty_name = VALUES(faculty_name),
+    email = VALUES(email),
+    password = VALUES(password),
+    department = VALUES(department);

@@ -524,6 +524,20 @@ body {
     box-shadow: var(--shadow);
 }
 
+.attendance-toolbar {
+    grid-template-columns: minmax(220px, 2fr) minmax(160px, 220px);
+}
+
+.attendance-toolbar button {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #4da4ff, #0f79ff);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 .schedule-summary {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

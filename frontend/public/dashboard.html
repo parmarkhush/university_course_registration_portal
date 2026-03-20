@@ -24,13 +24,12 @@
         </div>
         <nav>
             <ul class="menu">
-                <li><button class="menu-item active" data-section="student" type="button" onclick="showSection('student')">Student Form</button></li>
-                <li><button class="menu-item" data-section="courses" type="button" onclick="showSection('courses')">My Courses</button></li>
+                <li><button class="menu-item active" data-section="courses" type="button" onclick="showSection('courses')">My Courses</button></li>
                 <li><button class="menu-item" data-section="newcourses" type="button" onclick="showSection('newcourses')">New Courses</button></li>
-                <li><button class="menu-item" data-section="waitlist" type="button" onclick="showSection('waitlist')">Waitlist</button></li>
                 <li><button class="menu-item" data-section="notifications" type="button" onclick="showSection('notifications')">Notifications</button></li>
                 <li><button class="menu-item" data-section="calendar" type="button" onclick="showSection('calendar')">Academic Calendar</button></li>
                 <li><button class="menu-item" data-section="attendance" type="button" onclick="showSection('attendance')">Attendance</button></li>
+                <li><button class="menu-item" data-section="marks" type="button" onclick="showSection('marks')">Marks</button></li>
                 <li><button class="menu-item" data-section="ranking" type="button" onclick="showSection('ranking')">Student Rank List</button></li>
                 <li><button class="menu-item logout-item" type="button" onclick="logout()">Logout</button></li>
             </ul>
@@ -45,55 +44,8 @@
             <p class="page-copy">Everything important is grouped into clear sections so you can move through registration with less guesswork.</p>
         </header>
 
-        <!-- STUDENT FORM SECTION -->
-        <div class="content-section" id="studentSection">
-            <h2>Student Information</h2>
-            <div class="student-overview" id="studentOverview"></div>
-            <form id="studentForm" class="student-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="studentName">Name</label>
-                        <input type="text" id="studentName" placeholder="Enter full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentRoll">Roll No</label>
-                        <input type="text" id="studentRoll" placeholder="Enter roll number" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="studentGender">Gender</label>
-                        <select id="studentGender" required>
-                            <option value="">Select gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="studentCpi">CPI</label>
-                        <input type="number" id="studentCpi" placeholder="e.g. 8.2" min="0" max="10" step="0.01" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group full">
-                        <label for="studentCourses">Planned Courses (Optional, up to 5)</label>
-                        <select id="studentCourses" multiple>
-                            <option value="">Select courses</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit">Save Student Info</button>
-                <p id="studentFormMessage" class="form-message" aria-live="polite"></p>
-                <p id="studentRankMessage" class="form-message rank-message" aria-live="polite"></p>
-            </form>
-        </div>
-        
         <!-- MY COURSES SECTION -->
-        <div class="content-section hidden" id="coursesSection">
+        <div class="content-section" id="coursesSection">
             <h2>My Enrolled Courses</h2>
             <div id="scheduleSummary" class="schedule-summary"></div>
             <div id="myCoursesList" class="course-grid"></div>
@@ -125,13 +77,6 @@
             <div id="newCoursesList" class="course-grid"></div>
         </div>
 
-        <!-- WAITLIST SECTION -->
-        <div class="content-section hidden" id="waitlistSection">
-            <h2>My Waitlist</h2>
-            <div id="waitlistSummary" class="schedule-summary"></div>
-            <div id="waitlistList" class="course-grid"></div>
-        </div>
-
         <!-- NOTIFICATIONS SECTION -->
         <div class="content-section hidden" id="notificationsSection">
             <h2>Notifications</h2>
@@ -151,6 +96,10 @@
         <div class="content-section hidden" id="attendanceSection">
             <h2>My Attendance</h2>
             <div class="attendance-layout">
+                <div class="catalog-toolbar attendance-toolbar">
+                    <input type="text" id="attendanceRollLookup" placeholder="Enter your roll number to view attendance">
+                    <button type="button" id="attendanceLookupBtn">Check Attendance</button>
+                </div>
                 <div id="attendanceSummary" class="attendance-summary"></div>
                 <div class="attendance-chart-card">
                     <h2>Attendance Graph</h2>
@@ -158,6 +107,12 @@
                 </div>
                 <div id="attendanceList" class="attendance-grid"></div>
             </div>
+        </div>
+
+        <div class="content-section hidden" id="marksSection">
+            <h2>My Subject Marks</h2>
+            <div id="marksSummary" class="student-overview"></div>
+            <div id="marksList" class="course-grid"></div>
         </div>
 
         <!-- STUDENT RANKING SECTION -->

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Portal</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="faculty.css">
+</head>
+<body>
+<div class="dashboard-container faculty-layout">
+    <aside class="sidebar" aria-label="Faculty dashboard navigation">
+        <div class="sidebar-brand">
+            <p class="sidebar-eyebrow">Faculty Workspace</p>
+            <h2>University Portal</h2>
+        </div>
+        <div class="user-info">
+            <p id="facultyWelcome">Welcome, Faculty!</p>
+        </div>
+        <div class="theme-switch sidebar-theme-switch" aria-label="Choose theme" role="group">
+            <button type="button" class="theme-option" data-theme-choice="light">Light</button>
+            <button type="button" class="theme-option" data-theme-choice="dark">Dark</button>
+        </div>
+        <nav>
+            <ul class="menu">
+                <li><button class="menu-item active" data-section="attendance" type="button" onclick="showFacultySection('attendance')">Attendance</button></li>
+                <li><button class="menu-item" data-section="marks" type="button" onclick="showFacultySection('marks')">Marks</button></li>
+                <li><button class="menu-item" data-section="announcements" type="button" onclick="showFacultySection('announcements')">Announcements</button></li>
+                <li><button class="menu-item logout-item" type="button" id="facultyLogoutBtn">Logout</button></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-hero">
+            <p class="page-eyebrow">Faculty Dashboard</p>
+            <h1>Track classes, update attendance, and publish marks for each subject.</h1>
+            <p class="page-copy">Use the same portal system as students, but with faculty controls for attendance and marks.</p>
+        </header>
+
+        <div class="content-section" id="facultyAttendanceSection">
+            <h2>Attendance Management</h2>
+            <div class="catalog-toolbar faculty-toolbar">
+                <select id="attendanceSubject"></select>
+                <input type="text" id="facultyAttendanceRollNo" placeholder="Enter student roll number">
+            </div>
+            <div class="student-overview" id="facultyAttendanceSummary"></div>
+            <p id="facultyAttendanceMessage" class="form-message" aria-live="polite"></p>
+            <div id="facultyAttendanceList" class="course-grid"></div>
+        </div>
+
+        <div class="content-section hidden" id="facultyMarksSection">
+            <h2>Marks Upload</h2>
+            <div class="catalog-toolbar faculty-toolbar">
+                <select id="marksSubject"></select>
+                <input type="text" id="facultyMarksRollNo" placeholder="Enter student roll number">
+            </div>
+            <div class="student-overview" id="facultyMarksSummary"></div>
+            <p id="facultyMarksMessage" class="form-message" aria-live="polite"></p>
+            <div id="facultyMarksList" class="course-grid"></div>
+        </div>
+
+        <div class="content-section hidden" id="facultyAnnouncementsSection">
+            <h2>Announcements & Tasks</h2>
+            <p class="page-copy">Send instructions to all students or to one roll number, and optionally attach a PDF task file.</p>
+            <form id="facultyAnnouncementForm" class="faculty-announcement-form">
+                <label>
+                    Announcement Title
+                    <input type="text" id="announcementTitle" name="title" placeholder="Enter announcement title" required>
+                </label>
+                <label>
+                    Target Roll Number
+                    <input type="text" id="announcementRollNo" name="targetRollNo" placeholder="Leave blank to notify all students">
+                </label>
+                <label class="faculty-announcement-span">
+                    Instruction / Message
+                    <textarea id="announcementMessage" name="message" rows="5" placeholder="Write the task, notice, or classroom instruction here" required></textarea>
+                </label>
+                <label>
+                    PDF Task Attachment
+                    <input type="file" id="announcementPdf" name="pdf" accept="application/pdf">
+                </label>
+                <button type="submit">Publish Announcement</button>
+            </form>
+            <p id="facultyAnnouncementMessage" class="form-message" aria-live="polite"></p>
+            <div class="student-overview" id="facultyAnnouncementSummary"></div>
+            <div id="facultyAnnouncementList" class="notifications-list"></div>
+        </div>
+    </main>
+</div>
+
+<script src="faculty.js"></script>
+</body>
+</html>

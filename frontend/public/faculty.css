@@ -1,0 +1,117 @@
+.faculty-layout .sidebar {
+    width: 300px;
+}
+
+.faculty-toolbar {
+    grid-template-columns: minmax(220px, 280px) minmax(220px, 320px);
+    justify-content: start;
+}
+
+.faculty-card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.faculty-card-actions .enrolled {
+    margin-top: 0;
+}
+
+.faculty-marks-form {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.faculty-marks-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.faculty-marks-form input {
+    width: 100%;
+    padding: 12px 13px;
+    border-radius: 12px;
+    border: 1px solid rgba(30, 66, 112, 0.14);
+    background: var(--input-surface);
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+.faculty-marks-form button {
+    width: 100%;
+    margin-top: 4px;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #4da4ff, #0f79ff);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.faculty-announcement-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.faculty-announcement-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.faculty-announcement-form input,
+.faculty-announcement-form textarea {
+    width: 100%;
+    padding: 12px 13px;
+    border-radius: 12px;
+    border: 1px solid rgba(30, 66, 112, 0.14);
+    background: var(--input-surface);
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+.faculty-announcement-form textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.faculty-announcement-form button {
+    align-self: end;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #4da4ff, #0f79ff);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.faculty-announcement-span {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+    .faculty-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .faculty-card-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .faculty-announcement-form {
+        grid-template-columns: 1fr;
+    }
+}

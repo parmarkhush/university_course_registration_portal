@@ -29,17 +29,13 @@ async function apiRequest(url, options = {}) {
     return data;
 }
 
-function showStudentFormMessage(text, type) {
-    const message = document.getElementById('studentFormMessage');
-    if (!message) {
-        return;
-    }
-
-    message.textContent = text;
-    message.classList.remove('success', 'error');
-    if (type) {
-        message.classList.add(type);
-    }
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 async function initializeDashboardData() {
@@ -51,12 +47,14 @@ async function initializeDashboardData() {
 
         currentUserRecordCache = user;
         currentStudentProfileCache = profile;
+        if (profile && profile.name) {
+            document.getElementById('welcomeUser').textContent = `Welcome, ${profile.name}!`;
+        }
     } catch (error) {
         currentUserRecordCache = typeof dataService !== 'undefined' && typeof dataService.getUserByUsername === 'function'
             ? dataService.getUserByUsername(currentUser)
             : null;
         currentStudentProfileCache = null;
-        showStudentFormMessage(`Backend sync unavailable: ${error.message}`, 'error');
     }
 }
 
@@ -105,12 +103,6 @@ function initializeEnrollments() {
     }
 }
 
-function initializeWaitlists() {
-    if (!localStorage.getItem('waitlists')) {
-        localStorage.setItem('waitlists', JSON.stringify({}));
-    }
-}
-
 function initializeNotifications() {
     if (!localStorage.getItem('portalNotifications')) {
         localStorage.setItem('portalNotifications', JSON.stringify({}));
@@ -120,7 +112,6 @@ function initializeNotifications() {
 // Initialize data
 initializeCourses();
 initializeEnrollments();
-initializeWaitlists();
 initializeNotifications();
 
 const ATTENDANCE_SUBJECTS = [
@@ -297,21 +288,13 @@ function showSection(section) {
         activeMenu.classList.add('active');
     }
 
-    if (section === 'student') {
-        document.getElementById('studentSection').classList.remove('hidden');
-        populateCourseOptions();
-        loadStudentProfile();
-        renderStudentOverview();
-    } else if (section === 'courses') {
+    if (section === 'courses') {
         document.getElementById('coursesSection').classList.remove('hidden');
         loadMyCourses();
     } else if (section === 'newcourses') {
         document.getElementById('newcoursesSection').classList.remove('hidden');
         populateDepartmentFilter();
         loadNewCourses();
-    } else if (section === 'waitlist') {
-        document.getElementById('waitlistSection').classList.remove('hidden');
-        loadWaitlist();
     } else if (section === 'notifications') {
         document.getElementById('notificationsSection').classList.remove('hidden');
         loadNotifications();
@@ -321,51 +304,13 @@ function showSection(section) {
     } else if (section === 'attendance') {
         document.getElementById('attendanceSection').classList.remove('hidden');
         loadAttendance();
+    } else if (section === 'marks') {
+        document.getElementById('marksSection').classList.remove('hidden');
+        loadMarks();
     } else if (section === 'ranking') {
         document.getElementById('rankingSection').classList.remove('hidden');
         loadStudentRanking();
     }
-}
-
-function populateCourseOptions() {
-    const select = document.getElementById('studentCourses');
-    const allCourses = JSON.parse(localStorage.getItem('allCourses')) || [];
-    const selectedValues = Array.from(select.selectedOptions).map(option => option.value);
-
-    select.innerHTML = '';
-    allCourses.forEach(course => {
-        const option = document.createElement('option');
-        option.value = course.name;
-        option.textContent = course.name;
-        if (selectedValues.includes(course.name)) {
-            option.selected = true;
-        }
-        select.appendChild(option);
-    });
-}
-
-function loadStudentProfile() {
-    const data = getCurrentUserProfile();
-    if (!data) {
-        document.getElementById('studentName').value = '';
-        document.getElementById('studentRoll').value = '';
-        document.getElementById('studentGender').value = '';
-        document.getElementById('studentCpi').value = '';
-        updateRankMessage();
-        return;
-    }
-    document.getElementById('studentName').value = data.name || '';
-    document.getElementById('studentRoll').value = data.rollNo || '';
-    document.getElementById('studentGender').value = data.gender || '';
-    document.getElementById('studentCpi').value = data.cpi || '';
-    const preferredCourses = Array.isArray(data.preferredCourses)
-        ? data.preferredCourses
-        : (data.course ? [data.course] : []);
-    const courseSelect = document.getElementById('studentCourses');
-    Array.from(courseSelect.options).forEach(option => {
-        option.selected = preferredCourses.includes(option.value);
-    });
-    updateRankMessage();
 }
 
 function getCurrentUserRecord() {
@@ -387,6 +332,11 @@ function getCurrentUserProfile() {
     return currentStudentProfileCache;
 }
 
+function getResolvedRollNo() {
+    const profile = getCurrentUserProfile() || {};
+    return profile.rollNo || profile.rollNumber || '';
+}
+
 function getAdvisorDetails() {
     const userRecord = getCurrentUserRecord() || {};
     return {
@@ -403,22 +353,6 @@ function getPaymentDetails() {
         outstanding: due,
         status: due > 0 ? 'Pending' : 'Clear'
     };
-}
-
-function getAllWaitlists() {
-    return JSON.parse(localStorage.getItem('waitlists')) || {};
-}
-
-function getWaitlistForCourse(courseId) {
-    const allWaitlists = getAllWaitlists();
-    return allWaitlists[courseId] || [];
-}
-
-function getMyWaitlistedCourseIds() {
-    const allWaitlists = getAllWaitlists();
-    return Object.entries(allWaitlists)
-        .filter(([, usernames]) => usernames.includes(currentUser))
-        .map(([courseId]) => Number(courseId));
 }
 
 function getNotificationStore() {
@@ -527,62 +461,16 @@ function getRegistrationValidation(course) {
         return { allowed: false, message: 'Credit limit exceeded.' };
     }
 
+    if (myEnrolledIds.length >= 5) {
+        return { allowed: false, message: 'You can enroll in up to 5 courses only.' };
+    }
+
     const seatsLeft = course.totalSeats - course.enrolledCount;
     if (seatsLeft <= 0) {
         return { allowed: false, message: 'Course full.' };
     }
 
     return { allowed: true, message: 'Eligible to enroll.' };
-}
-
-function updateRankMessage() {
-    const messageElement = document.getElementById('studentRankMessage');
-    if (!messageElement) {
-        return;
-    }
-    const userRecord = getCurrentUserRecord();
-    if (!userRecord) {
-        messageElement.textContent = '';
-        return;
-    }
-    const holdText = userRecord.hasHold ? 'Active hold' : 'No hold';
-    const maxCredits = Number.isFinite(userRecord.maxCredits) ? userRecord.maxCredits : 24;
-    const usedCredits = (Number.isFinite(userRecord.baseCredits) ? userRecord.baseCredits : 0) + getCurrentEnrolledCredits();
-    messageElement.textContent = `Registration status: ${holdText} | Credits used: ${usedCredits}/${maxCredits}`;
-}
-
-function renderStudentOverview() {
-    const container = document.getElementById('studentOverview');
-    if (!container) {
-        return;
-    }
-
-    const userRecord = getCurrentUserRecord() || {};
-    const profile = getCurrentUserProfile() || {};
-    const advisor = getAdvisorDetails();
-    const payment = getPaymentDetails();
-    const usedCredits = (Number.isFinite(userRecord.baseCredits) ? userRecord.baseCredits : 0) + getCurrentEnrolledCredits();
-    const maxCredits = Number.isFinite(userRecord.maxCredits) ? userRecord.maxCredits : 24;
-    const waitlistCount = getMyWaitlistedCourseIds().length;
-
-    container.innerHTML = `
-        <div class="overview-card">
-            <h3>Program</h3>
-            <p><strong>${userRecord.program || 'B.Tech Computer Science'}</strong><br>${userRecord.academicLevel || 'Undergraduate'}</p>
-        </div>
-        <div class="overview-card">
-            <h3>Advisor</h3>
-            <p><strong>${advisor.name}</strong><br>${advisor.department}<br>${advisor.email}</p>
-        </div>
-        <div class="overview-card">
-            <h3>Registration Status</h3>
-            <p><strong>${userRecord.hasHold ? 'Hold Active' : 'Eligible'}</strong><br>Credits: ${usedCredits}/${maxCredits}<br>Waitlisted: ${waitlistCount}</p>
-        </div>
-        <div class="overview-card">
-            <h3>Payment Summary</h3>
-            <p><strong>${payment.status}</strong><br>Outstanding: Rs. ${payment.outstanding.toLocaleString()}<br>Student: ${profile.name || currentUser}</p>
-        </div>
-    `;
 }
 
 function initializeAttendanceForCurrentUser() {
@@ -600,20 +488,25 @@ function initializeAttendanceForCurrentUser() {
     localStorage.setItem(attendanceKey, JSON.stringify(mockAttendance));
 }
 
-function loadAttendance() {
-    initializeAttendanceForCurrentUser();
+function buildAttendanceEntriesFromPercentages(attendance) {
+    return ATTENDANCE_SUBJECTS.map(subject => {
+        const percent = Number.isFinite(attendance[subject]) ? attendance[subject] : 0;
+        return {
+            subject,
+            percent,
+            attendedClasses: percent,
+            totalClasses: 100
+        };
+    });
+}
+
+function renderAttendanceEntries(entries) {
     const listContainer = document.getElementById('attendanceList');
     const summaryContainer = document.getElementById('attendanceSummary');
     const chartContainer = document.getElementById('attendanceBarChart');
     if (!listContainer || !summaryContainer || !chartContainer) {
         return;
     }
-
-    const attendance = JSON.parse(localStorage.getItem(`attendance:${currentUser}`)) || {};
-    const entries = ATTENDANCE_SUBJECTS.map(subject => {
-        const percent = Number.isFinite(attendance[subject]) ? attendance[subject] : 0;
-        return { subject, percent };
-    });
 
     const total = entries.reduce((sum, item) => sum + item.percent, 0);
     const average = entries.length > 0 ? (total / entries.length) : 0;
@@ -662,6 +555,10 @@ function loadAttendance() {
                     <span>Attendance</span>
                     <strong>${item.percent}%</strong>
                 </div>
+                <div class="attendance-row">
+                    <span>Classes</span>
+                    <strong>${item.attendedClasses}/${item.totalClasses}</strong>
+                </div>
                 <div class="attendance-progress">
                     <span style="width: ${item.percent}%;"></span>
                 </div>
@@ -669,6 +566,91 @@ function loadAttendance() {
             </div>
         `;
     }).join('');
+}
+
+async function loadAttendance() {
+    const listContainer = document.getElementById('attendanceList');
+    const summaryContainer = document.getElementById('attendanceSummary');
+    const chartContainer = document.getElementById('attendanceBarChart');
+    if (!listContainer || !summaryContainer || !chartContainer) {
+        return;
+    }
+
+    const lookupInput = document.getElementById('attendanceRollLookup');
+    const resolvedRollNo = (lookupInput && lookupInput.value.trim()) || getResolvedRollNo();
+
+    if (lookupInput && !lookupInput.value.trim() && resolvedRollNo) {
+        lookupInput.value = resolvedRollNo;
+    }
+
+    try {
+        const data = resolvedRollNo
+            ? await apiRequest(`/api/students/attendance/roll/${encodeURIComponent(resolvedRollNo)}`)
+            : await apiRequest(`/api/students/${encodeURIComponent(currentUser)}/attendance`);
+        const entries = (data.attendance || []).map(item => ({
+            subject: item.subject,
+            percent: Number(item.percentage || 0),
+            attendedClasses: Number(item.attendedClasses || 0),
+            totalClasses: Number(item.totalClasses || 0)
+        }));
+        renderAttendanceEntries(entries);
+    } catch (error) {
+        initializeAttendanceForCurrentUser();
+        const attendance = JSON.parse(localStorage.getItem(`attendance:${currentUser}`)) || {};
+        renderAttendanceEntries(buildAttendanceEntriesFromPercentages(attendance));
+    }
+}
+
+async function loadMarks() {
+    const summaryContainer = document.getElementById('marksSummary');
+    const listContainer = document.getElementById('marksList');
+    if (!summaryContainer || !listContainer) {
+        return;
+    }
+
+    try {
+        const data = await apiRequest(`/api/students/${encodeURIComponent(currentUser)}/marks`);
+        const marks = data.marks || [];
+        const attempted = marks.filter(item => item.maxScore > 0 && item.score > 0);
+        const average = attempted.length
+            ? (attempted.reduce((sum, item) => sum + item.percentage, 0) / attempted.length).toFixed(1)
+            : '0.0';
+        const best = marks.reduce((max, item) => item.percentage > max.percentage ? item : max, marks[0] || { subject: '-', percentage: 0 });
+
+        summaryContainer.innerHTML = `
+            <div class="overview-card">
+                <h3>Subjects Evaluated</h3>
+                <p><strong>${attempted.length}</strong><br>subjects with uploaded marks</p>
+            </div>
+            <div class="overview-card">
+                <h3>Average Score</h3>
+                <p><strong>${average}%</strong><br>across evaluated subjects</p>
+            </div>
+            <div class="overview-card">
+                <h3>Best Subject</h3>
+                <p><strong>${best.subject || '-'}</strong><br>${best.percentage || 0}%</p>
+            </div>
+        `;
+
+        listContainer.innerHTML = marks.map(item => `
+            <div class="course-card">
+                <h3>${item.subject}</h3>
+                <p><strong>Marks:</strong> ${item.score}/${item.maxScore}</p>
+                <p><strong>Percentage:</strong> ${item.percentage}%</p>
+                <p class="seats-info ${item.percentage >= 75 ? '' : (item.percentage >= 40 ? 'low' : 'full')}">
+                    ${item.percentage >= 75 ? 'Strong performance' : (item.percentage >= 40 ? 'Can improve' : 'Needs support')}
+                </p>
+            </div>
+        `).join('');
+    } catch (error) {
+        summaryContainer.innerHTML = `
+            <div class="overview-card">
+                <h3>Marks Unavailable</h3>
+                <p>${error.message}</p>
+            </div>
+        `;
+        listContainer.innerHTML = '<p class="empty-message">No marks uploaded yet.</p>';
+    }
 }
 
 async function loadStudentRanking() {
@@ -720,6 +702,7 @@ function loadMyCourses() {
 
     if (summary) {
         const totalCredits = myCourses.reduce((sum, course) => sum + (course.credits || 0), 0);
+        const remainingCourseSlots = Math.max(0, 5 - myCourses.length);
         const scheduleItems = myCourses
             .slice()
             .sort((a, b) => (a.timeSlot || '').localeCompare(b.timeSlot || ''))
@@ -732,8 +715,8 @@ function loadMyCourses() {
                 ${myCourses.length ? `<ul>${scheduleItems}</ul>` : '<p>No classes added to your schedule yet.</p>'}
             </div>
             <div class="schedule-card">
-                <h3>Credit Load</h3>
-                <p><strong>${totalCredits}</strong> enrolled credits this term.</p>
+                <h3>Course Load</h3>
+                <p><strong>${myCourses.length}/5</strong> courses selected.<br>${totalCredits} total credits.<br>${remainingCourseSlots} slot(s) remaining.</p>
             </div>
         `;
     }
@@ -792,24 +775,16 @@ function loadNewCourses() {
     } else {
         container.innerHTML = availableCourses.map(course => {
             const seatsLeft = course.totalSeats - course.enrolledCount;
-            const isFull = seatsLeft <= 0;
-            const isLow = seatsLeft > 0 && seatsLeft <= 5;
             const validation = getRegistrationValidation(course);
-            const waitlist = getWaitlistForCourse(course.id);
-            const isWaitlisted = waitlist.includes(currentUser);
             const prerequisiteNames = getPrerequisiteNames(course);
 
             let seatClass = '';
-            if (isFull) seatClass = 'full';
-            else if (isLow) seatClass = 'low';
+            if (seatsLeft <= 0) seatClass = 'full';
+            else if (seatsLeft <= 5) seatClass = 'low';
 
-            const buttonLabel = validation.allowed
-                ? 'Enroll Now'
-                : (isFull ? (isWaitlisted ? `Waitlisted (#${waitlist.indexOf(currentUser) + 1})` : 'Join Waitlist') : validation.message);
-            const buttonAction = validation.allowed
-                ? `enrollCourse(${course.id})`
-                : (isFull && !isWaitlisted ? `joinWaitlist(${course.id})` : '');
-            const buttonDisabled = validation.allowed || (isFull && !isWaitlisted) ? '' : 'disabled';
+            const buttonLabel = validation.allowed ? 'Enroll Now' : validation.message;
+            const buttonAction = validation.allowed ? `enrollCourse(${course.id})` : '';
+            const buttonDisabled = validation.allowed ? '' : 'disabled';
 
             return `
                 <div class="course-card">
@@ -821,7 +796,6 @@ function loadNewCourses() {
                     <p><strong>Time Slot:</strong> ${course.timeSlot || 'TBD'}</p>
                     <p><strong>Prerequisites:</strong> ${prerequisiteNames.length ? prerequisiteNames.join(', ') : 'None'}</p>
                     <p class="seats-info ${seatClass}">${seatsLeft} seats left (${course.enrolledCount}/${course.totalSeats} enrolled)</p>
-                    <p><strong>Waitlist:</strong> ${waitlist.length} student(s)</p>
                     <button onclick="${buttonAction}" ${buttonDisabled}>
                         ${buttonLabel}
                     </button>
@@ -858,9 +832,6 @@ function enrollCourse(courseId) {
     addNotification(`Enrollment confirmed for ${course.name}.`, 'success');
     alert('Enrolled successfully!');
     loadNewCourses();
-    loadWaitlist();
-    updateRankMessage();
-    renderStudentOverview();
     
     // If on My Courses section, refresh it too
     if (!document.getElementById('coursesSection').classList.contains('hidden')) {
@@ -890,15 +861,11 @@ function unenrollCourse(courseId) {
             if (course && course.enrolledCount > 0) {
                 course.enrolledCount--;
                 localStorage.setItem('allCourses', JSON.stringify(allCourses));
-                processWaitlistForCourse(course.id, course.name);
             }
             
             addNotification(`You dropped ${course ? course.name : 'a course'}.`, 'info');
             alert('Unenrolled successfully!');
             loadMyCourses();
-            loadWaitlist();
-            updateRankMessage();
-            renderStudentOverview();
             
             // If on New Courses section, refresh it too
             if (!document.getElementById('newcoursesSection').classList.contains('hidden')) {
@@ -908,117 +875,57 @@ function unenrollCourse(courseId) {
     }
 }
 
-function joinWaitlist(courseId) {
-    const course = getCourseById(courseId);
-    if (!course) {
-        return;
-    }
-
-    const validation = getRegistrationValidation(course);
-    if (validation.allowed) {
-        enrollCourse(courseId);
-        return;
-    }
-
-    if (validation.message !== 'Course full.') {
-        alert(validation.message);
-        return;
-    }
-
-    const allWaitlists = getAllWaitlists();
-    if (!allWaitlists[courseId]) {
-        allWaitlists[courseId] = [];
-    }
-    if (!allWaitlists[courseId].includes(currentUser)) {
-        allWaitlists[courseId].push(currentUser);
-        localStorage.setItem('waitlists', JSON.stringify(allWaitlists));
-        addNotification(`You joined the waitlist for ${course.name} at position ${allWaitlists[courseId].length}.`, 'info');
-    }
-
-    loadNewCourses();
-    loadWaitlist();
-    renderStudentOverview();
-}
-
-function processWaitlistForCourse(courseId, courseName) {
-    const allWaitlists = getAllWaitlists();
-    const queue = allWaitlists[courseId] || [];
-    if (queue.length === 0) {
-        return;
-    }
-
-    const nextUser = queue.shift();
-    allWaitlists[courseId] = queue;
-    localStorage.setItem('waitlists', JSON.stringify(allWaitlists));
-
-    const enrollments = JSON.parse(localStorage.getItem('enrollments')) || {};
-    if (!enrollments[nextUser]) {
-        enrollments[nextUser] = [];
-    }
-    if (!enrollments[nextUser].includes(courseId)) {
-        enrollments[nextUser].push(courseId);
-        localStorage.setItem('enrollments', JSON.stringify(enrollments));
-    }
-
-    const notificationStore = getNotificationStore();
-    if (!notificationStore[nextUser]) {
-        notificationStore[nextUser] = [];
-    }
-    notificationStore[nextUser].unshift({
-        id: Date.now(),
-        type: 'success',
-        message: `Seat available: you were automatically enrolled in ${courseName} from the waitlist.`,
-        createdAt: new Date().toLocaleString(),
-        read: false
-    });
-    saveNotificationStore(notificationStore);
-}
-
-function loadWaitlist() {
-    const summary = document.getElementById('waitlistSummary');
-    const container = document.getElementById('waitlistList');
-    if (!summary || !container) {
-        return;
-    }
-
-    const waitlistedIds = getMyWaitlistedCourseIds();
-    const waitlistedCourses = waitlistedIds.map(id => getCourseById(id)).filter(Boolean);
-
-    summary.innerHTML = `
-        <div class="schedule-card">
-            <h3>Waitlist Summary</h3>
-            <p><strong>${waitlistedCourses.length}</strong> course(s) currently waiting for a seat.</p>
-        </div>
-    `;
-
-    if (waitlistedCourses.length === 0) {
-        container.innerHTML = '<p class="empty-message">You are not on any waitlist right now.</p>';
-        return;
-    }
-
-    container.innerHTML = waitlistedCourses.map(course => {
-        const queue = getWaitlistForCourse(course.id);
-        const position = queue.indexOf(currentUser) + 1;
-        return `
-            <div class="course-card">
-                <h3>${course.name}</h3>
-                <p>${course.description}</p>
-                <p><strong>Instructor:</strong> ${course.instructor}</p>
-                <p><strong>Time Slot:</strong> ${course.timeSlot || 'TBD'}</p>
-                <p><strong>Your Position:</strong> ${position}</p>
-                <p class="seats-info low">Queue length: ${queue.length}</p>
-            </div>
-        `;
-    }).join('');
-}
-
-function loadNotifications() {
+async function loadNotifications() {
     const container = document.getElementById('notificationsList');
     if (!container) {
         return;
     }
 
-    const notifications = getNotificationStore()[currentUser] || [];
+    const localNotifications = (getNotificationStore()[currentUser] || []).map(item => ({
+        id: `local-${item.id}`,
+        title: item.type === 'success' ? 'Update' : 'Notification',
+        message: item.message,
+        createdAt: item.createdAt,
+        sortTime: Number(item.id) || Date.now(),
+        read: item.read,
+        hasPdf: false,
+        pdfUrl: '',
+        meta: ''
+    }));
+
+    let announcementNotifications = [];
+    try {
+        const data = await apiRequest(`/api/students/${encodeURIComponent(currentUser)}/announcements`);
+        announcementNotifications = (data.announcements || []).map(item => ({
+            id: `announcement-${item.id}`,
+            title: item.title || 'Faculty Announcement',
+            message: item.message,
+            createdAt: new Date(item.createdAt).toLocaleString('en-IN'),
+            sortTime: new Date(item.createdAt).getTime() || Date.now(),
+            read: false,
+            hasPdf: item.hasPdf,
+            pdfUrl: item.hasPdf ? `/api/announcements/${item.id}/file` : '',
+            meta: item.facultyName
+                ? `From ${item.facultyName}${item.targetRollNo ? ` for roll no ${item.targetRollNo}` : ''}`
+                : (item.targetRollNo ? `For roll no ${item.targetRollNo}` : 'Faculty broadcast')
+        }));
+    } catch (error) {
+        announcementNotifications = [{
+            id: 'announcement-error',
+            title: 'Faculty Announcements',
+            message: `Unable to load faculty announcements right now: ${error.message}`,
+            createdAt: new Date().toLocaleString('en-IN'),
+            sortTime: Date.now(),
+            read: true,
+            hasPdf: false,
+            pdfUrl: '',
+            meta: 'Backend sync unavailable'
+        }];
+    }
+
+    const notifications = [...announcementNotifications, ...localNotifications]
+        .sort((left, right) => right.sortTime - left.sortTime);
+
     if (notifications.length === 0) {
         container.innerHTML = '<p class="empty-message">No notifications yet.</p>';
         return;
@@ -1026,8 +933,10 @@ function loadNotifications() {
 
     container.innerHTML = notifications.map(item => `
         <div class="notification-card ${item.read ? '' : 'unread'}">
-            <h3>${item.type === 'success' ? 'Update' : 'Notification'}</h3>
-            <p>${item.message}</p>
+            <h3>${escapeHtml(item.title)}</h3>
+            ${item.meta ? `<p><strong>${escapeHtml(item.meta)}</strong></p>` : ''}
+            <p>${escapeHtml(item.message)}</p>
+            ${item.hasPdf ? `<p><a href="${item.pdfUrl}" target="_blank" rel="noopener noreferrer">Open attached PDF</a></p>` : ''}
             <time>${item.createdAt}</time>
         </div>
     `).join('');
@@ -1162,52 +1071,6 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// Student form handler
-document.getElementById('studentForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const preferredCourses = Array.from(document.getElementById('studentCourses').selectedOptions)
-        .map(option => option.value)
-        .slice(0, 5);
-
-    const studentData = {
-        name: document.getElementById('studentName').value.trim(),
-        rollNo: document.getElementById('studentRoll').value.trim(),
-        gender: document.getElementById('studentGender').value,
-        cpi: document.getElementById('studentCpi').value,
-        preferredCourses
-    };
-
-    try {
-        const response = await apiRequest(`/api/students/${encodeURIComponent(currentUser)}`, {
-            method: 'PUT',
-            body: JSON.stringify(studentData)
-        });
-
-        currentStudentProfileCache = response.profile;
-        showStudentFormMessage('Student info saved successfully to MySQL.', 'success');
-        updateRankMessage();
-        renderStudentOverview();
-        if (!document.getElementById('newcoursesSection').classList.contains('hidden')) {
-            loadNewCourses();
-        }
-        if (!document.getElementById('rankingSection').classList.contains('hidden')) {
-            loadStudentRanking();
-        }
-    } catch (error) {
-        showStudentFormMessage(error.message, 'error');
-    }
-});
-
-document.getElementById('studentCourses').addEventListener('change', function() {
-    const selected = Array.from(this.selectedOptions);
-    if (selected.length > 5) {
-        selected[selected.length - 1].selected = false;
-        alert('You can select up to 5 courses only.');
-    }
-    updateRankMessage();
-});
-
 document.getElementById('courseSearch').addEventListener('input', function() {
     PORTAL_STATE.courseSearch = this.value;
     loadNewCourses();
@@ -1233,7 +1096,15 @@ initializeTheme();
 document.querySelectorAll('.theme-option').forEach(button => {
     button.addEventListener('click', () => setTheme(button.dataset.themeChoice));
 });
+document.getElementById('attendanceLookupBtn').addEventListener('click', () => {
+    loadAttendance();
+});
 initializeDashboardData().finally(() => {
-    showSection('student');
+    const lookupInput = document.getElementById('attendanceRollLookup');
+    const rollNo = getResolvedRollNo();
+    if (lookupInput && rollNo) {
+        lookupInput.value = rollNo;
+    }
+    showSection('courses');
 });
 
