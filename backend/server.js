@@ -33,7 +33,7 @@ const pool = mysql.createPool({
     connectionLimit: 10
 });
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
 function parseJsonArray(value, fallback = []) {
@@ -78,6 +78,23 @@ function mapUserRow(row) {
 
 function normalizeRollNo(value) {
     return String(value || '').trim().toUpperCase();
+}
+
+function resolveAllowedRollNo(value) {
+    const normalized = normalizeRollNo(value).replace(/\s+/g, '');
+    if (!normalized) {
+        return null;
+    }
+
+    if (allowedStudentMap.has(normalized)) {
+        return normalized;
+    }
+
+    const matches = allowedStudents
+        .map(student => student.rollNo.toUpperCase())
+        .filter(rollNo => rollNo.endsWith(normalized));
+
+    return matches.length === 1 ? matches[0] : null;
 }
 
 function getAllowedStudentFromEmail(email) {
@@ -188,13 +205,14 @@ function mapAnnouncementRow(row) {
 }
 
 async function getStudentByRollNo(rollNo) {
+    const resolvedRollNo = resolveAllowedRollNo(rollNo) || rollNo;
     const [rows] = await pool.query(
         `SELECT u.id, u.username, sp.roll_no
          FROM users u
          INNER JOIN student_profiles sp ON sp.user_id = u.id
          WHERE UPPER(sp.roll_no) = UPPER(?)
          LIMIT 1`,
-        [rollNo]
+        [resolvedRollNo]
     );
 
     return rows[0] || null;
@@ -562,14 +580,18 @@ app.get('/api/students/:username/announcements', async (req, res) => {
         }
 
         const rollNo = profiles[0].roll_no || '';
+        const normalizedRollNo = (resolveAllowedRollNo(rollNo) || normalizeRollNo(rollNo)).replace(/\s+/g, '');
         const [rows] = await pool.query(
             `SELECT fa.*, fu.faculty_name
              FROM faculty_announcements fa
              INNER JOIN faculty_users fu ON fu.id = fa.faculty_user_id
-             WHERE fa.target_roll_no IS NULL
-                OR (fa.target_roll_no IS NOT NULL AND UPPER(fa.target_roll_no) = UPPER(?))
-             ORDER BY fa.created_at DESC`,
-            [rollNo]
+              WHERE fa.target_roll_no IS NULL
+                 OR (
+                    fa.target_roll_no IS NOT NULL
+                    AND REPLACE(UPPER(fa.target_roll_no), ' ', '') = ?
+                 )
+              ORDER BY fa.created_at DESC`,
+            [normalizedRollNo]
         );
 
         res.json({ announcements: rows.map(mapAnnouncementRow) });
@@ -842,7 +864,7 @@ app.post('/api/faculty/announcements', async (req, res) => {
                 facultyRows[0].id,
                 title,
                 message,
-                targetRollNo ? targetRollNo.trim() : null,
+                targetRollNo ? (resolveAllowedRollNo(targetRollNo) || targetRollNo.trim()) : null,
                 pdfBase64 ? (pdfFileName || 'task.pdf') : null,
                 pdfBase64 ? pdfMimeType : null,
                 pdfBase64 || null
@@ -885,6 +907,16 @@ app.get('/dashboard.html', (req, res) => {
 
 app.get('/faculty.html', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'public', 'faculty.html'));
+});
+
+app.use((error, req, res, next) => {
+    if (error?.type === 'entity.too.large') {
+        return res.status(413).json({
+            message: 'The attached PDF is too large. Please upload a smaller file.'
+        });
+    }
+
+    return next(error);
 });
 
 app.listen(port, () => {

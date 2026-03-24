@@ -1,204 +1,1282 @@
 [
-  { "rollNo": "24BCP026", "name": "Dhairya Vipulbhai Shah" },
-  { "rollNo": "24BCP027", "name": "Vraj Janakbhai Patel" },
-  { "rollNo": "24BCP028", "name": "Aryan Lalitkumar Amin" },
-  { "rollNo": "24BCP029", "name": "Sanjana Rashmi Jade" },
-  { "rollNo": "24BCP030", "name": "Baldaniya Lakshya Sanjaybhai" },
-  { "rollNo": "24BCP031", "name": "Kanetiya Shyam Maneshbhai" },
-  { "rollNo": "24BCP033", "name": "Prashant Kumar Koiri" },
-  { "rollNo": "24BCP035", "name": "Hadiyal Rahulbhai Prabhubhai" },
-  { "rollNo": "24BCP036", "name": "Patel Kishan Hitendrakumar" },
-  { "rollNo": "24BCP037", "name": "Patel Happyben Gaurangkumar" },
-  { "rollNo": "24BCP038", "name": "Suraj Sah Kalwar" },
-  { "rollNo": "24BCP039", "name": "Aditya Kumar Shrivastav" },
-  { "rollNo": "24BCP040", "name": "Dewan Raj Manandhar" },
-  { "rollNo": "24BCP041", "name": "Diya B Patel" },
-  { "rollNo": "24BCP042", "name": "Aryan Rakeshbhai Parikh" },
-  { "rollNo": "24BCP043", "name": "Krish Dalsukhbhai Korat" },
-  { "rollNo": "24BCP044", "name": "Mohammed Sufiyan Mohammed Anish Bhayala" },
-  { "rollNo": "24BCP045", "name": "Dev Rajeshkumar Patel" },
-  { "rollNo": "24BCP069", "name": "Shruti Rajeshbhai Ramani" },
-  { "rollNo": "24BCP070", "name": "Dev Mitesh Desai" },
-  { "rollNo": "24BCP071", "name": "Parth Mukeshkumar Mistry" },
-  { "rollNo": "24BCP072", "name": "Patel Tirth" },
-  { "rollNo": "24BCP073", "name": "Meet Satishkumar Patel" },
-  { "rollNo": "24BCP074", "name": "Maru Deven Karabhai" },
-  { "rollNo": "24BCP075", "name": "Shah Nisarg Jignesh" },
-  { "rollNo": "24BCP076", "name": "Shah Princy Hiren" },
-  { "rollNo": "24BCP077", "name": "Vanik Manthan Pravin" },
-  { "rollNo": "24BCP078", "name": "Patel Jiya Jigneshbhai" },
-  { "rollNo": "24BCP079", "name": "Devraj Kumar" },
-  { "rollNo": "24BCP080", "name": "Arman Ahmad Dhuniya" },
-  { "rollNo": "24BCP106", "name": "Parmar Jaydeep Pravinbhai" },
-  { "rollNo": "24BCP107", "name": "Patel Ayush Miteshbhai" },
-  { "rollNo": "24BCP108", "name": "Aditya Ashish Doshi" },
-  { "rollNo": "24BCP109", "name": "Boghra Mahi Kaushalbhai" },
-  { "rollNo": "24BCP110", "name": "Richa Mukesh Kumar Patel" },
-  { "rollNo": "24BCP111", "name": "Parikumari Sujitbhai Chaudhari" },
-  { "rollNo": "24BCP113", "name": "Niraj Kathayat" },
-  { "rollNo": "24BCP114", "name": "Amreliya Manthan" },
-  { "rollNo": "24BCP115", "name": "Karavadara Ravi Ram" },
-  { "rollNo": "24BCP116", "name": "Solanki Krish Mukeshbhai" },
-  { "rollNo": "24BCP121", "name": "Rajveer Ronak Rajpuria" },
-  { "rollNo": "24BCP122", "name": "Ansh Gaurav Raval" },
-  { "rollNo": "24BCP123", "name": "Yashvi Pankajbhai Panara" },
-  { "rollNo": "24BCP124", "name": "Hemant Kumar" },
-  { "rollNo": "24BCP125", "name": "Bhavya Uteshiya" },
-  { "rollNo": "24BCP126", "name": "Krish Kishorbhai Bhanderi" },
-  { "rollNo": "24BCP127", "name": "Jeelben Alpeshkumar Shah" },
-  { "rollNo": "24BCP128", "name": "Panav Brijesh Patel" },
-  { "rollNo": "24BCP129", "name": "Rushil Anand Parikh" },
-  { "rollNo": "24BCP130", "name": "Kenil Jigarkumar Sanghavi" },
-  { "rollNo": "24BCP131", "name": "Het Jignesh Gabani" },
-  { "rollNo": "24BCP132", "name": "Het Harshadkumar Patel" },
-  { "rollNo": "24BCP133", "name": "Swayam Avinashbhai Patel" },
-  { "rollNo": "24BCP135", "name": "Het Renish Bhai Vachhani" },
-  { "rollNo": "24BCP136", "name": "Vanshika Jolin Nanavati" },
-  { "rollNo": "24BCP137", "name": "Aditya Satchidananda Sahoo" },
-  { "rollNo": "24BCP138", "name": "Viraj Prakashbhai Vasoya" },
-  { "rollNo": "24BCP139", "name": "Tushya Pragnesh Desai" },
-  { "rollNo": "24BCP140", "name": "Suthar Mittalben Bhagvanbhai" },
-  { "rollNo": "24BCP141", "name": "Zinzala Nikunj Naranbhai" },
-  { "rollNo": "24BCP142", "name": "Dev Hemant Domadiya" },
-  { "rollNo": "24BCP143", "name": "Rahil Jigarbhai Doshi" },
-  { "rollNo": "24BCP144", "name": "Het Jiteshbhai Vekariya" },
-  { "rollNo": "24BCP145", "name": "Nandini Piyush Gandhi" },
-  { "rollNo": "24BCP146", "name": "Mantra Rakeshbhai Patel" },
-  { "rollNo": "24BCP147", "name": "Sonagara Pareshbhai Mansukhbhai" },
-  { "rollNo": "24BCP148", "name": "Denish Jayantibhai Lunagariya" },
-  { "rollNo": "24BCP149", "name": "Vrutiben Manishbhai Thakkar" },
-  { "rollNo": "24BCP150", "name": "Patel Hard Hitendra" },
-  { "rollNo": "24BCP151", "name": "Lokadiya Virajkumar Kamleshbhai" },
-  { "rollNo": "24BCP152", "name": "Bhungaliya Rudrakumar Ranchhodbhai" },
-  { "rollNo": "24BCP153", "name": "Tilava Ujas Rameshkumar" },
-  { "rollNo": "24BCP154", "name": "Parsaniya Jenilkumar Jayeshbhai" },
-  { "rollNo": "24BCP155", "name": "Chauhan Poonam Vinod" },
-  { "rollNo": "24BCP156", "name": "Boghara Meet Vipulbhai" },
-  { "rollNo": "24BCP157", "name": "Jayswal Jyot Chiragkumar" },
-  { "rollNo": "24BCP160", "name": "Yashita Pradipkumar Parmar" },
-  { "rollNo": "24BCP161", "name": "Prexa Jayeshkumar Shah" },
-  { "rollNo": "24BCP162", "name": "Chavada Abhishek Balabhai" },
-  { "rollNo": "24BCP163", "name": "Hetvi Makadiya" },
-  { "rollNo": "24BCP164", "name": "Jahanvi Mukeshbhai Babariya" },
-  { "rollNo": "24BCP165", "name": "Aditya Vipul Kapadia" },
-  { "rollNo": "24BCP166", "name": "Rathin Rupeshkumar Udeshi" },
-  { "rollNo": "24BCP167", "name": "Dhyan Jigar Vakil" },
-  { "rollNo": "24BCP168", "name": "Makwana Kavy Kiranbhai" },
-  { "rollNo": "24BCP169", "name": "Nandani Deepak Vastani" },
-  { "rollNo": "24BCP170", "name": "Aditya Viren Dalal" },
-  { "rollNo": "24BCP171", "name": "Harsh Alpeshbhai Shah" },
-  { "rollNo": "24BCP172", "name": "Patel Dhruvi Alpesh" },
-  { "rollNo": "24BCP174", "name": "Aarin Mikin Shah" },
-  { "rollNo": "24BCP175", "name": "Dax Kalpeshbhai Savaliya" },
-  { "rollNo": "24BCP176", "name": "Yash Lalitbhai Kalathiya" },
-  { "rollNo": "24BCP177", "name": "Manan Raghubhai Vala" },
-  { "rollNo": "24BCP178", "name": "Drashtant Birju Sangani" },
-  { "rollNo": "24BCP179", "name": "Utsav Rajesh Kachhadia" },
-  { "rollNo": "24BCP180", "name": "Shaili Laxminarayan Gupta" },
-  { "rollNo": "24BCP181", "name": "Satyansh Mahesh Vavdiya" },
-  { "rollNo": "24BCP189", "name": "Nirmal Hitenkumar Vora" },
-  { "rollNo": "24BCP190", "name": "Aadi Paragkumar Jatakia" },
-  { "rollNo": "24BCP191", "name": "Jill Vekariya" },
-  { "rollNo": "24BCP192", "name": "Aashish Chand" },
-  { "rollNo": "24BCP193", "name": "Sujan Rana" },
-  { "rollNo": "24BCP194", "name": "Shakshi Mishra" },
-  { "rollNo": "24BCP195", "name": "Vrukshika Dua" },
-  { "rollNo": "24BCP196", "name": "Dev Mistry" },
-  { "rollNo": "24BCP198", "name": "Krishnu Gupta" },
-  { "rollNo": "24BCP199", "name": "Aaditya Singh Khsetri" },
-  { "rollNo": "24BCP200", "name": "Esha Anilkumar Patwari" },
-  { "rollNo": "24BCP201", "name": "Jadeja Meetrajsinh Sandeepsinh" },
-  { "rollNo": "24BCP202", "name": "Dev Sachinkumar Chauhan" },
-  { "rollNo": "24BCP203", "name": "Jainish Sanjaybhai Hirpara" },
-  { "rollNo": "24BCP204", "name": "Manthan Prafulbhai Vaja" },
-  { "rollNo": "24BCP205", "name": "Yash Kotadiya" },
-  { "rollNo": "24BCP206", "name": "Kavyan Bansal" },
-  { "rollNo": "24BCP207", "name": "Siddhant Tejas Patel" },
-  { "rollNo": "24BCP208", "name": "Vanzara Gajendra" },
-  { "rollNo": "24BCP209", "name": "Jani Yashvardhan Pradyumanbhai" },
-  { "rollNo": "24BCP212", "name": "Ishaan Kathiriya" },
-  { "rollNo": "24BCP213", "name": "Preksha Samik Patel" },
-  { "rollNo": "24BCP214", "name": "Rency Anilbhai Hinsu" },
-  { "rollNo": "24BCP215", "name": "Jash Keyurbhai Chauhan" },
-  { "rollNo": "24BCP216", "name": "Shyam Ashokbhai Ughreja" },
-  { "rollNo": "24BCP217", "name": "Patel Vedant Vijaybhai" },
-  { "rollNo": "24BCP218", "name": "Pinal Dhanjibhai Ladumor" },
-  { "rollNo": "24BCP219", "name": "Dhruva Kamleshkumar Patel" },
-  { "rollNo": "24BCP220", "name": "Paril Pravinbhai Paladiya" },
-  { "rollNo": "24BCP221", "name": "Rudraksh Tiwari" },
-  { "rollNo": "24BCP222", "name": "Maru Abhishek Vrajlal" },
-  { "rollNo": "24BCP223", "name": "Pabari Yesha Bhavinbhai" },
-  { "rollNo": "24BCP224", "name": "Kunj Kalpeshbhai Akbari" },
-  { "rollNo": "24BCP225", "name": "Patel Prince Dineshkumar" },
-  { "rollNo": "24BCP226", "name": "Kunj Rajeshkumar Shah" },
-  { "rollNo": "24BCP227", "name": "Yug Shah Vipulkumar" },
-  { "rollNo": "24BCP229", "name": "Priyanshu Rajesh Nimavat" },
-  { "rollNo": "24BCP230", "name": "Vismay Pragneshkumar Shah" },
-  { "rollNo": "24BCP231", "name": "Patel Nishant Jitendrabhai" },
-  { "rollNo": "24BCP232", "name": "Thakkar Shlok Bharat" },
-  { "rollNo": "24BCP233", "name": "Kasundra Meet Hiteshbhai" },
-  { "rollNo": "24BCP234", "name": "Dhanani Rudra Tusharbhai" },
-  { "rollNo": "24BCP275", "name": "Gohil Manthan Pareshbhai" },
-  { "rollNo": "24BCP276", "name": "Yashpalsinh Jethwa" },
-  { "rollNo": "24BCP278", "name": "Shukan Kirit Parmar" },
-  { "rollNo": "24BCP280", "name": "Tirth Himanshu Soni" },
-  { "rollNo": "24BCP282", "name": "Yogi Jayeshbhai Makwana" },
-  { "rollNo": "24BCP283", "name": "Krishiv Ketan Desai" },
-  { "rollNo": "24BCP284", "name": "Harsh Sandipbhai Choksi" },
-  { "rollNo": "24BCP285", "name": "Pranshu Pareshbhai Bodara" },
-  { "rollNo": "24BCP286", "name": "Manan Maheshbhai Vaghasiya" },
-  { "rollNo": "24BCP287", "name": "Shubham Harikrishna Maheshwari" },
-  { "rollNo": "24BCP288", "name": "Shah Hilag Ruchirbhai" },
-  { "rollNo": "24BCP289", "name": "Hemang Kamleshkumar Kantaria" },
-  { "rollNo": "24BCP291", "name": "Jay Patel" },
-  { "rollNo": "24BCP292", "name": "Heet Gaurav Mankad" },
-  { "rollNo": "24BCP293", "name": "Vishwa Ajay Shah" },
-  { "rollNo": "24BCP294", "name": "Vainsh Akshay Jesingbhai" },
-  { "rollNo": "24BCP295", "name": "Hemil Mitang Shah" },
-  { "rollNo": "24BCP296", "name": "Shah Tirth Paragkumar" },
-  { "rollNo": "24BCP297", "name": "Atri Ratish Shah" },
-  { "rollNo": "24BCP298", "name": "Aryan Vipulbhai Kyada" },
-  { "rollNo": "24BCP299", "name": "Mann Mineshkumar Patel" },
-  { "rollNo": "24BCP300", "name": "Ansh Rajendrakumar Patel" },
-  { "rollNo": "24BCP301", "name": "Maharshi Ashvinkumar Karpatiya" },
-  { "rollNo": "24BCP302", "name": "Aryan Manojkumar Shah" },
-  { "rollNo": "24BCP303", "name": "Vaibhav Pradipbhai Sutariya" },
-  { "rollNo": "24BCP304", "name": "Nimmagadda Sri Harshini" },
-  { "rollNo": "24BCP305", "name": "Vasu Pravinbhai Savani" },
-  { "rollNo": "24BCP306", "name": "Saksham Prakashbhai Katariya" },
-  { "rollNo": "24BCP307", "name": "Dhruvil Jayeshkumar Patel" },
-  { "rollNo": "24BCP308", "name": "Shashvat Vikramkumar Patel" },
-  { "rollNo": "24BCP309", "name": "Patel Dharm Kiritkumar" },
-  { "rollNo": "24BCP310", "name": "Kareliya Shivam Sureshbhai" },
-  { "rollNo": "24BCP311", "name": "Om Bharatbhai Panchal" },
-  { "rollNo": "24BCP312", "name": "Barvaliya Brijesh Manojbhai" },
-  { "rollNo": "24BCP313", "name": "Brahmbhatt Prince Jayprakash" },
-  { "rollNo": "24BCP314", "name": "Patoliya Priyanshiben Kalpeshbhai" },
-  { "rollNo": "24BCP315", "name": "Chaudhari Sohankumar Ishvarbhai" },
-  { "rollNo": "24BCP316", "name": "Misty Vinubhai Balat" },
-  { "rollNo": "24BCP317", "name": "Priyanshi Balkrushna Parikh" },
-  { "rollNo": "24BCP318", "name": "Prince Natvarbhai Gadhiya" },
-  { "rollNo": "24BCP319", "name": "Vidhi Jigar Sheth" },
-  { "rollNo": "24BCP320", "name": "Anup Jaydipkumar Tandel" },
-  { "rollNo": "24BCP321", "name": "Sujal Dineshbhai Markana" },
-  { "rollNo": "24BCP322", "name": "Patel Neel Haresh" },
-  { "rollNo": "24BCP323", "name": "Jaineel Julin Lakhia" },
-  { "rollNo": "24BCP324", "name": "Om Meghjibhai Makadia" },
-  { "rollNo": "24BCP325", "name": "Parth Niranjanbhai Bhungani" },
-  { "rollNo": "24BCP326", "name": "Jash Jitendra Bohare" },
-  { "rollNo": "24BCP327", "name": "Fenil Vijaybhai Koshti" },
-  { "rollNo": "24BCP328", "name": "Bhavya Jagdish Javia" },
-  { "rollNo": "24BCP329", "name": "Manav Bipinbhai Vaishnani" },
-  { "rollNo": "24BCP330", "name": "Patel Dharam Ashvinkumar" },
-  { "rollNo": "24BCP331", "name": "Yug Dineshkumar Sevak" },
-  { "rollNo": "24BCP332", "name": "Chopada Vatsaly Gajendrakumar" },
-  { "rollNo": "24BCP333", "name": "Arya Vikrambhai Patel" },
-  { "rollNo": "24BCP334", "name": "Gamit Hetvikumari Riteshbhai" },
-  { "rollNo": "24BCP335", "name": "Siddh Vipulkumar Botadara" },
-  { "rollNo": "24BCP355", "name": "Preet Rohitkumar Patel" },
-  { "rollNo": "24BCP356", "name": "Pratham Hemang Dagli" },
-  { "rollNo": "24BCP357", "name": "Krish Manishkumar Shah" },
-  { "rollNo": "24BCP395", "name": "Manav Hiteshbhai Bhuva" },
-  { "rollNo": "24BCP396", "name": "Vishv Nirav Dave" },
-  { "rollNo": "24BCP397", "name": "Armi Narottambhai Senjariya" }
+  {
+    "rollNo": "24BCP002",
+    "name": "Rahi Pankajbhai Kothari"
+  },
+  {
+    "rollNo": "24BCP003",
+    "name": "Shyam Babubhai Patel"
+  },
+  {
+    "rollNo": "24BCP004",
+    "name": "Patel Man Rajeshkumar"
+  },
+  {
+    "rollNo": "24BCP005",
+    "name": "Vedant Manish Darji"
+  },
+  {
+    "rollNo": "24BCP006",
+    "name": "Joshi Netri Jigneshbhai"
+  },
+  {
+    "rollNo": "24BCP007",
+    "name": "Patel Tirth Mehulkumar"
+  },
+  {
+    "rollNo": "24BCP008",
+    "name": "Roshan Hirenbhai Moradiya"
+  },
+  {
+    "rollNo": "24BCP009",
+    "name": "Prince Sanjaybhai Detroja"
+  },
+  {
+    "rollNo": "24BCP010",
+    "name": "Heer Pankilkumar Patel"
+  },
+  {
+    "rollNo": "24BCP011",
+    "name": "Viroja Aryan Shantilal"
+  },
+  {
+    "rollNo": "24BCP012",
+    "name": "Aditya Girishbhai Ashara"
+  },
+  {
+    "rollNo": "24BCP013",
+    "name": "Rathod Varshil Nilesh"
+  },
+  {
+    "rollNo": "24BCP014",
+    "name": "Dudhat Krisil Shaileshbhai"
+  },
+  {
+    "rollNo": "24BCP015",
+    "name": "Jils Hiteshbhai Kotadiya"
+  },
+  {
+    "rollNo": "24BCP016",
+    "name": "Rutvi Girirajsinh Solanki"
+  },
+  {
+    "rollNo": "24BCP017",
+    "name": "Shikariya Aadi Rakeshkumar"
+  },
+  {
+    "rollNo": "24BCP018",
+    "name": "Madhav Sanjay Jadvani"
+  },
+  {
+    "rollNo": "24BCP019",
+    "name": "Om Alkeshbhai Modi"
+  },
+  {
+    "rollNo": "24BCP020",
+    "name": "Aadi Hemanshu Kumar Patel"
+  },
+  {
+    "rollNo": "24BCP021",
+    "name": "Nandaniya Tirth Masaribhai"
+  },
+  {
+    "rollNo": "24BCP022",
+    "name": "Devaryasinh Tripalsinh Rayjada"
+  },
+  {
+    "rollNo": "24BCP023",
+    "name": "Rakholiya Shrey Dharmendrabhai"
+  },
+  {
+    "rollNo": "24BCP024",
+    "name": "Priyam Arvindbhai Bhalodiya"
+  },
+  {
+    "rollNo": "24BCP025",
+    "name": "Rhydham Vikrambhai Shah"
+  },
+  {
+    "rollNo": "24BCP026",
+    "name": "Dhairya Vipulbhai Shah"
+  },
+  {
+    "rollNo": "24BCP027",
+    "name": "Vraj Janakbhai Patel"
+  },
+  {
+    "rollNo": "24BCP028",
+    "name": "Aryan Lalitkumar Amin"
+  },
+  {
+    "rollNo": "24BCP029",
+    "name": "Sanjana Rashmi Jade"
+  },
+  {
+    "rollNo": "24BCP030",
+    "name": "Baldaniya Lakshya Sanjaybhai"
+  },
+  {
+    "rollNo": "24BCP031",
+    "name": "Kanetiya Shyam Maneshbhai"
+  },
+  {
+    "rollNo": "24BCP033",
+    "name": "Prashant Kumar Koiri"
+  },
+  {
+    "rollNo": "24BCP035",
+    "name": "Hadiyal Rahulbhai Prabhubhai"
+  },
+  {
+    "rollNo": "24BCP036",
+    "name": "Patel Kishan Hitendrakumar"
+  },
+  {
+    "rollNo": "24BCP037",
+    "name": "Patel Happyben Gaurangkumar"
+  },
+  {
+    "rollNo": "24BCP038",
+    "name": "Suraj Sah Kalwar"
+  },
+  {
+    "rollNo": "24BCP039",
+    "name": "Aditya Kumar Shrivastav"
+  },
+  {
+    "rollNo": "24BCP040",
+    "name": "Dewan Raj Manandhar"
+  },
+  {
+    "rollNo": "24BCP041",
+    "name": "Diya B Patel"
+  },
+  {
+    "rollNo": "24BCP042",
+    "name": "Aryan Rakeshbhai Parikh"
+  },
+  {
+    "rollNo": "24BCP043",
+    "name": "Krish Dalsukhbhai Korat"
+  },
+  {
+    "rollNo": "24BCP044",
+    "name": "Mohammed Sufiyan Mohammed Anish Bhayala"
+  },
+  {
+    "rollNo": "24BCP045",
+    "name": "Dev Rajeshkumar Patel"
+  },
+  {
+    "rollNo": "24BCP046",
+    "name": "Vruti Rajeshkumar Vaghasia"
+  },
+  {
+    "rollNo": "24BCP049",
+    "name": "Mantra Nileshkumar Chaudhary"
+  },
+  {
+    "rollNo": "24BCP053",
+    "name": "Raj Dixitkumar Patel"
+  },
+  {
+    "rollNo": "24BCP056",
+    "name": "Neel Chetan Shiyalwala"
+  },
+  {
+    "rollNo": "24BCP058",
+    "name": "Panara Prince Vimalbhai"
+  },
+  {
+    "rollNo": "24BCP060",
+    "name": "Vatsal Jaydeepbhai Bhindora"
+  },
+  {
+    "rollNo": "24BCP062",
+    "name": "Sorathiya Netra Rajesh"
+  },
+  {
+    "rollNo": "24BCP064",
+    "name": "Kalavadiya Manankumar Yogeshbhai"
+  },
+  {
+    "rollNo": "24BCP066",
+    "name": "Shrey Deepak Parekh"
+  },
+  {
+    "rollNo": "24BCP068",
+    "name": "Vishvam Rohanbhai Modi"
+  },
+  {
+    "rollNo": "24BCP069",
+    "name": "Shruti Rajeshbhai Ramani"
+  },
+  {
+    "rollNo": "24BCP070",
+    "name": "Dev Mitesh Desai"
+  },
+  {
+    "rollNo": "24BCP071",
+    "name": "Parth Mukeshkumar Mistry"
+  },
+  {
+    "rollNo": "24BCP072",
+    "name": "Patel Tirth"
+  },
+  {
+    "rollNo": "24BCP073",
+    "name": "Meet Satishkumar Patel"
+  },
+  {
+    "rollNo": "24BCP074",
+    "name": "Maru Deven Karabhai"
+  },
+  {
+    "rollNo": "24BCP075",
+    "name": "Shah Nisarg Jignesh"
+  },
+  {
+    "rollNo": "24BCP076",
+    "name": "Shah Princy Hiren"
+  },
+  {
+    "rollNo": "24BCP077",
+    "name": "Vanik Manthan Pravin"
+  },
+  {
+    "rollNo": "24BCP078",
+    "name": "Patel Jiya Jigneshbhai"
+  },
+  {
+    "rollNo": "24BCP079",
+    "name": "Devraj Kumar"
+  },
+  {
+    "rollNo": "24BCP080",
+    "name": "Arman Ahmad Dhuniya"
+  },
+  {
+    "rollNo": "24BCP081",
+    "name": "Aaryan Vipul Gajjar"
+  },
+  {
+    "rollNo": "24BCP083",
+    "name": "Shreyas Satyan Dave"
+  },
+  {
+    "rollNo": "24BCP085",
+    "name": "Mandaviya Dharmik Yogeshkumar"
+  },
+  {
+    "rollNo": "24BCP087",
+    "name": "Tarjani Kuntal Gajjar"
+  },
+  {
+    "rollNo": "24BCP089",
+    "name": "Kenil Himmatkumar Patel"
+  },
+  {
+    "rollNo": "24BCP091",
+    "name": "Jalp Vipulkumar Patel"
+  },
+  {
+    "rollNo": "24BCP093",
+    "name": "Malaviya Vishva Mansukhbhai"
+  },
+  {
+    "rollNo": "24BCP095",
+    "name": "Mihir Manishkumar Sonara"
+  },
+  {
+    "rollNo": "24BCP096",
+    "name": "Gresy Atulbhai Fuletra"
+  },
+  {
+    "rollNo": "24BCP098",
+    "name": "Patel Jilben Mukeshbhai"
+  },
+  {
+    "rollNo": "24BCP100",
+    "name": "Arya Jigneshkumar Shah"
+  },
+  {
+    "rollNo": "24BCP102",
+    "name": "Harsh Rajeshkumar Patel"
+  },
+  {
+    "rollNo": "24BCP104",
+    "name": "Vivan Pandya"
+  },
+  {
+    "rollNo": "24BCP106",
+    "name": "Parmar Jaydeep Pravinbhai"
+  },
+  {
+    "rollNo": "24BCP107",
+    "name": "Patel Ayush Miteshbhai"
+  },
+  {
+    "rollNo": "24BCP108",
+    "name": "Aditya Ashish Doshi"
+  },
+  {
+    "rollNo": "24BCP109",
+    "name": "Boghra Mahi Kaushalbhai"
+  },
+  {
+    "rollNo": "24BCP110",
+    "name": "Richa Mukesh Kumar Patel"
+  },
+  {
+    "rollNo": "24BCP111",
+    "name": "Parikumari Sujitbhai Chaudhari"
+  },
+  {
+    "rollNo": "24BCP113",
+    "name": "Niraj Kathayat"
+  },
+  {
+    "rollNo": "24BCP114",
+    "name": "Amreliya Manthan"
+  },
+  {
+    "rollNo": "24BCP115",
+    "name": "Karavadara Ravi Ram"
+  },
+  {
+    "rollNo": "24BCP116",
+    "name": "Solanki Krish Mukeshbhai"
+  },
+  {
+    "rollNo": "24BCP121",
+    "name": "Rajveer Ronak Rajpuria"
+  },
+  {
+    "rollNo": "24BCP122",
+    "name": "Ansh Gaurav Raval"
+  },
+  {
+    "rollNo": "24BCP123",
+    "name": "Yashvi Pankajbhai Panara"
+  },
+  {
+    "rollNo": "24BCP124",
+    "name": "Hemant Kumar"
+  },
+  {
+    "rollNo": "24BCP125",
+    "name": "Bhavya Uteshiya"
+  },
+  {
+    "rollNo": "24BCP126",
+    "name": "Krish Kishorbhai Bhanderi"
+  },
+  {
+    "rollNo": "24BCP127",
+    "name": "Jeelben Alpeshkumar Shah"
+  },
+  {
+    "rollNo": "24BCP128",
+    "name": "Panav Brijesh Patel"
+  },
+  {
+    "rollNo": "24BCP129",
+    "name": "Rushil Anand Parikh"
+  },
+  {
+    "rollNo": "24BCP130",
+    "name": "Kenil Jigarkumar Sanghavi"
+  },
+  {
+    "rollNo": "24BCP131",
+    "name": "Het Jignesh Gabani"
+  },
+  {
+    "rollNo": "24BCP132",
+    "name": "Het Harshadkumar Patel"
+  },
+  {
+    "rollNo": "24BCP133",
+    "name": "Swayam Avinashbhai Patel"
+  },
+  {
+    "rollNo": "24BCP135",
+    "name": "Het Renish Bhai Vachhani"
+  },
+  {
+    "rollNo": "24BCP136",
+    "name": "Vanshika Jolin Nanavati"
+  },
+  {
+    "rollNo": "24BCP137",
+    "name": "Aditya Satchidananda Sahoo"
+  },
+  {
+    "rollNo": "24BCP138",
+    "name": "Viraj Prakashbhai Vasoya"
+  },
+  {
+    "rollNo": "24BCP139",
+    "name": "Tushya Pragnesh Desai"
+  },
+  {
+    "rollNo": "24BCP140",
+    "name": "Suthar Mittalben Bhagvanbhai"
+  },
+  {
+    "rollNo": "24BCP141",
+    "name": "Zinzala Nikunj Naranbhai"
+  },
+  {
+    "rollNo": "24BCP142",
+    "name": "Dev Hemant Domadiya"
+  },
+  {
+    "rollNo": "24BCP143",
+    "name": "Rahil Jigarbhai Doshi"
+  },
+  {
+    "rollNo": "24BCP144",
+    "name": "Het Jiteshbhai Vekariya"
+  },
+  {
+    "rollNo": "24BCP145",
+    "name": "Nandini Piyush Gandhi"
+  },
+  {
+    "rollNo": "24BCP146",
+    "name": "Mantra Rakeshbhai Patel"
+  },
+  {
+    "rollNo": "24BCP147",
+    "name": "Sonagara Pareshbhai Mansukhbhai"
+  },
+  {
+    "rollNo": "24BCP148",
+    "name": "Denish Jayantibhai Lunagariya"
+  },
+  {
+    "rollNo": "24BCP149",
+    "name": "Vrutiben Manishbhai Thakkar"
+  },
+  {
+    "rollNo": "24BCP150",
+    "name": "Patel Hard Hitendra"
+  },
+  {
+    "rollNo": "24BCP151",
+    "name": "Lokadiya Virajkumar Kamleshbhai"
+  },
+  {
+    "rollNo": "24BCP152",
+    "name": "Bhungaliya Rudrakumar Ranchhodbhai"
+  },
+  {
+    "rollNo": "24BCP153",
+    "name": "Tilava Ujas Rameshkumar"
+  },
+  {
+    "rollNo": "24BCP154",
+    "name": "Parsaniya Jenilkumar Jayeshbhai"
+  },
+  {
+    "rollNo": "24BCP155",
+    "name": "Chauhan Poonam Vinod"
+  },
+  {
+    "rollNo": "24BCP156",
+    "name": "Boghara Meet Vipulbhai"
+  },
+  {
+    "rollNo": "24BCP157",
+    "name": "Jayswal Jyot Chiragkumar"
+  },
+  {
+    "rollNo": "24BCP160",
+    "name": "Yashita Pradipkumar Parmar"
+  },
+  {
+    "rollNo": "24BCP161",
+    "name": "Prexa Jayeshkumar Shah"
+  },
+  {
+    "rollNo": "24BCP162",
+    "name": "Chavada Abhishek Balabhai"
+  },
+  {
+    "rollNo": "24BCP163",
+    "name": "Hetvi Makadiya"
+  },
+  {
+    "rollNo": "24BCP164",
+    "name": "Jahanvi Mukeshbhai Babariya"
+  },
+  {
+    "rollNo": "24BCP165",
+    "name": "Aditya Vipul Kapadia"
+  },
+  {
+    "rollNo": "24BCP166",
+    "name": "Rathin Rupeshkumar Udeshi"
+  },
+  {
+    "rollNo": "24BCP167",
+    "name": "Dhyan Jigar Vakil"
+  },
+  {
+    "rollNo": "24BCP168",
+    "name": "Makwana Kavy Kiranbhai"
+  },
+  {
+    "rollNo": "24BCP169",
+    "name": "Nandani Deepak Vastani"
+  },
+  {
+    "rollNo": "24BCP170",
+    "name": "Aditya Viren Dalal"
+  },
+  {
+    "rollNo": "24BCP171",
+    "name": "Harsh Alpeshbhai Shah"
+  },
+  {
+    "rollNo": "24BCP172",
+    "name": "Patel Dhruvi Alpesh"
+  },
+  {
+    "rollNo": "24BCP174",
+    "name": "Aarin Mikin Shah"
+  },
+  {
+    "rollNo": "24BCP175",
+    "name": "Dax Kalpeshbhai Savaliya"
+  },
+  {
+    "rollNo": "24BCP176",
+    "name": "Yash Lalitbhai Kalathiya"
+  },
+  {
+    "rollNo": "24BCP177",
+    "name": "Manan Raghubhai Vala"
+  },
+  {
+    "rollNo": "24BCP178",
+    "name": "Drashtant Birju Sangani"
+  },
+  {
+    "rollNo": "24BCP179",
+    "name": "Utsav Rajesh Kachhadia"
+  },
+  {
+    "rollNo": "24BCP180",
+    "name": "Shaili Laxminarayan Gupta"
+  },
+  {
+    "rollNo": "24BCP181",
+    "name": "Satyansh Mahesh Vavdiya"
+  },
+  {
+    "rollNo": "24BCP182",
+    "name": "Rudra Darshan Patel"
+  },
+  {
+    "rollNo": "24BCP184",
+    "name": "Viha Darshan Vyas"
+  },
+  {
+    "rollNo": "24BCP186",
+    "name": "Vedaant Daxeshkumar Upadhyay"
+  },
+  {
+    "rollNo": "24BCP188",
+    "name": "Dvij Bhaveshbhai Patel"
+  },
+  {
+    "rollNo": "24BCP189",
+    "name": "Nirmal Hitenkumar Vora"
+  },
+  {
+    "rollNo": "24BCP190",
+    "name": "Aadi Paragkumar Jatakia"
+  },
+  {
+    "rollNo": "24BCP191",
+    "name": "Jill Vekariya"
+  },
+  {
+    "rollNo": "24BCP192",
+    "name": "Aashish Chand"
+  },
+  {
+    "rollNo": "24BCP193",
+    "name": "Sujan Rana"
+  },
+  {
+    "rollNo": "24BCP194",
+    "name": "Shakshi Mishra"
+  },
+  {
+    "rollNo": "24BCP195",
+    "name": "Vrukshika Dua"
+  },
+  {
+    "rollNo": "24BCP196",
+    "name": "Dev Mistry"
+  },
+  {
+    "rollNo": "24BCP198",
+    "name": "Krishnu Gupta"
+  },
+  {
+    "rollNo": "24BCP199",
+    "name": "Aaditya Singh Khsetri"
+  },
+  {
+    "rollNo": "24BCP200",
+    "name": "Esha Anilkumar Patwari"
+  },
+  {
+    "rollNo": "24BCP201",
+    "name": "Jadeja Meetrajsinh Sandeepsinh"
+  },
+  {
+    "rollNo": "24BCP202",
+    "name": "Dev Sachinkumar Chauhan"
+  },
+  {
+    "rollNo": "24BCP203",
+    "name": "Jainish Sanjaybhai Hirpara"
+  },
+  {
+    "rollNo": "24BCP204",
+    "name": "Manthan Prafulbhai Vaja"
+  },
+  {
+    "rollNo": "24BCP205",
+    "name": "Yash Kotadiya"
+  },
+  {
+    "rollNo": "24BCP206",
+    "name": "Kavyan Bansal"
+  },
+  {
+    "rollNo": "24BCP207",
+    "name": "Siddhant Tejas Patel"
+  },
+  {
+    "rollNo": "24BCP208",
+    "name": "Vanzara Gajendra"
+  },
+  {
+    "rollNo": "24BCP209",
+    "name": "Jani Yashvardhan Pradyumanbhai"
+  },
+  {
+    "rollNo": "24BCP212",
+    "name": "Ishaan Kathiriya"
+  },
+  {
+    "rollNo": "24BCP213",
+    "name": "Preksha Samik Patel"
+  },
+  {
+    "rollNo": "24BCP214",
+    "name": "Rency Anilbhai Hinsu"
+  },
+  {
+    "rollNo": "24BCP215",
+    "name": "Jash Keyurbhai Chauhan"
+  },
+  {
+    "rollNo": "24BCP216",
+    "name": "Shyam Ashokbhai Ughreja"
+  },
+  {
+    "rollNo": "24BCP217",
+    "name": "Patel Vedant Vijaybhai"
+  },
+  {
+    "rollNo": "24BCP218",
+    "name": "Pinal Dhanjibhai Ladumor"
+  },
+  {
+    "rollNo": "24BCP219",
+    "name": "Dhruva Kamleshkumar Patel"
+  },
+  {
+    "rollNo": "24BCP220",
+    "name": "Paril Pravinbhai Paladiya"
+  },
+  {
+    "rollNo": "24BCP221",
+    "name": "Rudraksh Tiwari"
+  },
+  {
+    "rollNo": "24BCP222",
+    "name": "Maru Abhishek Vrajlal"
+  },
+  {
+    "rollNo": "24BCP223",
+    "name": "Pabari Yesha Bhavinbhai"
+  },
+  {
+    "rollNo": "24BCP224",
+    "name": "Kunj Kalpeshbhai Akbari"
+  },
+  {
+    "rollNo": "24BCP225",
+    "name": "Patel Prince Dineshkumar"
+  },
+  {
+    "rollNo": "24BCP226",
+    "name": "Kunj Rajeshkumar Shah"
+  },
+  {
+    "rollNo": "24BCP227",
+    "name": "Yug Shah Vipulkumar"
+  },
+  {
+    "rollNo": "24BCP229",
+    "name": "Priyanshu Rajesh Nimavat"
+  },
+  {
+    "rollNo": "24BCP230",
+    "name": "Vismay Pragneshkumar Shah"
+  },
+  {
+    "rollNo": "24BCP231",
+    "name": "Patel Nishant Jitendrabhai"
+  },
+  {
+    "rollNo": "24BCP232",
+    "name": "Thakkar Shlok Bharat"
+  },
+  {
+    "rollNo": "24BCP233",
+    "name": "Kasundra Meet Hiteshbhai"
+  },
+  {
+    "rollNo": "24BCP234",
+    "name": "Dhanani Rudra Tusharbhai"
+  },
+  {
+    "rollNo": "24BCP240",
+    "name": "Shah Daksh Ketankumar"
+  },
+  {
+    "rollNo": "24BCP243",
+    "name": "Sachi Manishkumar Patel"
+  },
+  {
+    "rollNo": "24BCP245",
+    "name": "Vishwa Alpesh Patel"
+  },
+  {
+    "rollNo": "24BCP247",
+    "name": "Mansi Sharma"
+  },
+  {
+    "rollNo": "24BCP249",
+    "name": "Utsav Paragbhai Pansuriya"
+  },
+  {
+    "rollNo": "24BCP251",
+    "name": "Vrushal Jayeshbhai Soliya"
+  },
+  {
+    "rollNo": "24BCP253",
+    "name": "Prince Bharatbhai Makwana"
+  },
+  {
+    "rollNo": "24BCP255",
+    "name": "Kavya Tarunbhai Sojitra"
+  },
+  {
+    "rollNo": "24BCP257",
+    "name": "Tejal Vinod Meena"
+  },
+  {
+    "rollNo": "24BCP259",
+    "name": "Jenil Nitin Mehta"
+  },
+  {
+    "rollNo": "24BCP261",
+    "name": "Mahir Dhaval Shah"
+  },
+  {
+    "rollNo": "24BCP264",
+    "name": "Savsani Prince Dineshbhai"
+  },
+  {
+    "rollNo": "24BCP266",
+    "name": "Siddhanth Singh"
+  },
+  {
+    "rollNo": "24BCP268",
+    "name": "Tilala Devansh Alpeshbhai"
+  },
+  {
+    "rollNo": "24BCP270",
+    "name": "Sneha Dwivedi"
+  },
+  {
+    "rollNo": "24BCP272",
+    "name": "Pipaliya Vaibhav"
+  },
+  {
+    "rollNo": "24BCP275",
+    "name": "Gohil Manthan Pareshbhai"
+  },
+  {
+    "rollNo": "24BCP276",
+    "name": "Yashpalsinh Jethwa"
+  },
+  {
+    "rollNo": "24BCP278",
+    "name": "Shukan Kirit Parmar"
+  },
+  {
+    "rollNo": "24BCP280",
+    "name": "Tirth Himanshu Soni"
+  },
+  {
+    "rollNo": "24BCP282",
+    "name": "Yogi Jayeshbhai Makwana"
+  },
+  {
+    "rollNo": "24BCP283",
+    "name": "Krishiv Ketan Desai"
+  },
+  {
+    "rollNo": "24BCP284",
+    "name": "Harsh Sandipbhai Choksi"
+  },
+  {
+    "rollNo": "24BCP285",
+    "name": "Pranshu Pareshbhai Bodara"
+  },
+  {
+    "rollNo": "24BCP286",
+    "name": "Manan Maheshbhai Vaghasiya"
+  },
+  {
+    "rollNo": "24BCP287",
+    "name": "Shubham Harikrishna Maheshwari"
+  },
+  {
+    "rollNo": "24BCP288",
+    "name": "Shah Hilag Ruchirbhai"
+  },
+  {
+    "rollNo": "24BCP289",
+    "name": "Hemang Kamleshkumar Kantaria"
+  },
+  {
+    "rollNo": "24BCP291",
+    "name": "Jay Patel"
+  },
+  {
+    "rollNo": "24BCP292",
+    "name": "Heet Gaurav Mankad"
+  },
+  {
+    "rollNo": "24BCP293",
+    "name": "Vishwa Ajay Shah"
+  },
+  {
+    "rollNo": "24BCP294",
+    "name": "Vainsh Akshay Jesingbhai"
+  },
+  {
+    "rollNo": "24BCP295",
+    "name": "Hemil Mitang Shah"
+  },
+  {
+    "rollNo": "24BCP296",
+    "name": "Shah Tirth Paragkumar"
+  },
+  {
+    "rollNo": "24BCP297",
+    "name": "Atri Ratish Shah"
+  },
+  {
+    "rollNo": "24BCP298",
+    "name": "Aryan Vipulbhai Kyada"
+  },
+  {
+    "rollNo": "24BCP299",
+    "name": "Mann Mineshkumar Patel"
+  },
+  {
+    "rollNo": "24BCP300",
+    "name": "Ansh Rajendrakumar Patel"
+  },
+  {
+    "rollNo": "24BCP301",
+    "name": "Maharshi Ashvinkumar Karpatiya"
+  },
+  {
+    "rollNo": "24BCP302",
+    "name": "Aryan Manojkumar Shah"
+  },
+  {
+    "rollNo": "24BCP303",
+    "name": "Vaibhav Pradipbhai Sutariya"
+  },
+  {
+    "rollNo": "24BCP304",
+    "name": "Nimmagadda Sri Harshini"
+  },
+  {
+    "rollNo": "24BCP305",
+    "name": "Vasu Pravinbhai Savani"
+  },
+  {
+    "rollNo": "24BCP306",
+    "name": "Saksham Prakashbhai Katariya"
+  },
+  {
+    "rollNo": "24BCP307",
+    "name": "Dhruvil Jayeshkumar Patel"
+  },
+  {
+    "rollNo": "24BCP308",
+    "name": "Shashvat Vikramkumar Patel"
+  },
+  {
+    "rollNo": "24BCP309",
+    "name": "Patel Dharm Kiritkumar"
+  },
+  {
+    "rollNo": "24BCP310",
+    "name": "Kareliya Shivam Sureshbhai"
+  },
+  {
+    "rollNo": "24BCP311",
+    "name": "Om Bharatbhai Panchal"
+  },
+  {
+    "rollNo": "24BCP312",
+    "name": "Barvaliya Brijesh Manojbhai"
+  },
+  {
+    "rollNo": "24BCP313",
+    "name": "Brahmbhatt Prince Jayprakash"
+  },
+  {
+    "rollNo": "24BCP314",
+    "name": "Patoliya Priyanshiben Kalpeshbhai"
+  },
+  {
+    "rollNo": "24BCP315",
+    "name": "Chaudhari Sohankumar Ishvarbhai"
+  },
+  {
+    "rollNo": "24BCP316",
+    "name": "Misty Vinubhai Balat"
+  },
+  {
+    "rollNo": "24BCP317",
+    "name": "Priyanshi Balkrushna Parikh"
+  },
+  {
+    "rollNo": "24BCP318",
+    "name": "Prince Natvarbhai Gadhiya"
+  },
+  {
+    "rollNo": "24BCP319",
+    "name": "Vidhi Jigar Sheth"
+  },
+  {
+    "rollNo": "24BCP320",
+    "name": "Anup Jaydipkumar Tandel"
+  },
+  {
+    "rollNo": "24BCP321",
+    "name": "Sujal Dineshbhai Markana"
+  },
+  {
+    "rollNo": "24BCP322",
+    "name": "Patel Neel Haresh"
+  },
+  {
+    "rollNo": "24BCP323",
+    "name": "Jaineel Julin Lakhia"
+  },
+  {
+    "rollNo": "24BCP324",
+    "name": "Om Meghjibhai Makadia"
+  },
+  {
+    "rollNo": "24BCP325",
+    "name": "Parth Niranjanbhai Bhungani"
+  },
+  {
+    "rollNo": "24BCP326",
+    "name": "Jash Jitendra Bohare"
+  },
+  {
+    "rollNo": "24BCP327",
+    "name": "Fenil Vijaybhai Koshti"
+  },
+  {
+    "rollNo": "24BCP328",
+    "name": "Bhavya Jagdish Javia"
+  },
+  {
+    "rollNo": "24BCP329",
+    "name": "Manav Bipinbhai Vaishnani"
+  },
+  {
+    "rollNo": "24BCP330",
+    "name": "Patel Dharam Ashvinkumar"
+  },
+  {
+    "rollNo": "24BCP331",
+    "name": "Yug Dineshkumar Sevak"
+  },
+  {
+    "rollNo": "24BCP332",
+    "name": "Chopada Vatsaly Gajendrakumar"
+  },
+  {
+    "rollNo": "24BCP333",
+    "name": "Arya Vikrambhai Patel"
+  },
+  {
+    "rollNo": "24BCP334",
+    "name": "Gamit Hetvikumari Riteshbhai"
+  },
+  {
+    "rollNo": "24BCP335",
+    "name": "Siddh Vipulkumar Botadara"
+  },
+  {
+    "rollNo": "24BCP336",
+    "name": "Vishw Harshadkumar Amin"
+  },
+  {
+    "rollNo": "24BCP337",
+    "name": "Khush Shaileshkumar Parmar"
+  },
+  {
+    "rollNo": "24BCP338",
+    "name": "Priyam Parmar"
+  },
+  {
+    "rollNo": "24BCP339",
+    "name": "Ghetia Jeel Paragkumar"
+  },
+  {
+    "rollNo": "24BCP340",
+    "name": "Aghara Vedkumar Dilipbhai"
+  },
+  {
+    "rollNo": "24BCP341",
+    "name": "Vasava Jaykumar Hemantkumar"
+  },
+  {
+    "rollNo": "24BCP342",
+    "name": "Ratadiya Chirag Bharatbhai"
+  },
+  {
+    "rollNo": "24BCP343",
+    "name": "Kakadiya Prince Dipakbhai"
+  },
+  {
+    "rollNo": "24BCP344",
+    "name": "Parmar Yash Shaileshbhai"
+  },
+  {
+    "rollNo": "24BCP345",
+    "name": "Sujit Kumar Tiwari"
+  },
+  {
+    "rollNo": "24BCP346",
+    "name": "Shuvam Kumar Rauniyar"
+  },
+  {
+    "rollNo": "24BCP347",
+    "name": "Kishan Yadav"
+  },
+  {
+    "rollNo": "24BCP348",
+    "name": "Ankesh Kanu"
+  },
+  {
+    "rollNo": "24BCP349",
+    "name": "Sorathiya Srushti Vimalbhai"
+  },
+  {
+    "rollNo": "24BCP350",
+    "name": "Dankhara Om Sanjaybhai"
+  },
+  {
+    "rollNo": "24BCP351",
+    "name": "Dhruv Dubey"
+  },
+  {
+    "rollNo": "24BCP354",
+    "name": "Chaudhary Prince Manishbhai"
+  },
+  {
+    "rollNo": "24BCP355",
+    "name": "Preet Rohitkumar Patel"
+  },
+  {
+    "rollNo": "24BCP356",
+    "name": "Pratham Hemang Dagli"
+  },
+  {
+    "rollNo": "24BCP357",
+    "name": "Krish Manishkumar Shah"
+  },
+  {
+    "rollNo": "24BCP358",
+    "name": "Shirley Regina Arnaldo Manjate"
+  },
+  {
+    "rollNo": "24BCP359",
+    "name": "Samuel Fernando Mabjaia"
+  },
+  {
+    "rollNo": "24BCP360",
+    "name": "Keven Carlos Cossa"
+  },
+  {
+    "rollNo": "24BCP361",
+    "name": "Nelson Grilo Lange Lubrino"
+  },
+  {
+    "rollNo": "24BCP362",
+    "name": "Leonel Moises Lino Durao"
+  },
+  {
+    "rollNo": "24BCP363",
+    "name": "Enzo Nicolas Victorino Macovela"
+  },
+  {
+    "rollNo": "24BCP365",
+    "name": "Amodh Ray Yadav"
+  },
+  {
+    "rollNo": "24BCP366",
+    "name": "Sangam Jha"
+  },
+  {
+    "rollNo": "24BCP367",
+    "name": "Ujjwal Jha"
+  },
+  {
+    "rollNo": "24BCP369",
+    "name": "Ayush Harshadkumar Patel"
+  },
+  {
+    "rollNo": "24BCP370",
+    "name": "Mili Chiragbhai Patel"
+  },
+  {
+    "rollNo": "24BCP371",
+    "name": "Patel Priyank Ashvinbhai"
+  },
+  {
+    "rollNo": "24BCP372",
+    "name": "Sondagar Mihir Jigneshbhai"
+  },
+  {
+    "rollNo": "24BCP373",
+    "name": "Patel Shiv Hareshkumar"
+  },
+  {
+    "rollNo": "24BCP374",
+    "name": "Gajera Krishna Narendrabhai"
+  },
+  {
+    "rollNo": "24BCP375",
+    "name": "Pateliya Jaitinbhai Gulabbhai"
+  },
+  {
+    "rollNo": "24BCP376",
+    "name": "Adesara Harit Ronak"
+  },
+  {
+    "rollNo": "24BCP377",
+    "name": "Patel Parin Bhaveshbhai"
+  },
+  {
+    "rollNo": "24BCP378",
+    "name": "Devdeep Mukeshbhai Chauhan"
+  },
+  {
+    "rollNo": "24BCP379",
+    "name": "Rakholiya Parth Pareshbhai"
+  },
+  {
+    "rollNo": "24BCP380",
+    "name": "Sambhav Adhikari"
+  },
+  {
+    "rollNo": "24BCP381",
+    "name": "Arpon Sarker"
+  },
+  {
+    "rollNo": "24BCP382",
+    "name": "Bibek Aryal"
+  },
+  {
+    "rollNo": "24BCP383",
+    "name": "Aayush Siwakoti"
+  },
+  {
+    "rollNo": "24BCP384",
+    "name": "Reewaj Chandra Uranw"
+  },
+  {
+    "rollNo": "24BCP385",
+    "name": "Dhrup Prajapati"
+  },
+  {
+    "rollNo": "24BCP386",
+    "name": "Md.Aasif Hussain"
+  },
+  {
+    "rollNo": "24BCP387",
+    "name": "Piyush Chand"
+  },
+  {
+    "rollNo": "24BCP389",
+    "name": "Gamit Dhruviben Hareshbhai"
+  },
+  {
+    "rollNo": "24BCP390",
+    "name": "Bhadarka Meet Virendrabhai"
+  },
+  {
+    "rollNo": "24BCP391",
+    "name": "Rathod Arshil Mahmadbhai"
+  },
+  {
+    "rollNo": "24BCP392",
+    "name": "Kathiriya Bhavik Pravinbhai"
+  },
+  {
+    "rollNo": "24BCP393",
+    "name": "Modiya Aravkumar Rajeshbhai"
+  },
+  {
+    "rollNo": "24BCP394",
+    "name": "Varu Neetkumar Jayeshbhai"
+  },
+  {
+    "rollNo": "24BCP395",
+    "name": "Manav Hiteshbhai Bhuva"
+  },
+  {
+    "rollNo": "24BCP396",
+    "name": "Vishv Nirav Dave"
+  },
+  {
+    "rollNo": "24BCP397",
+    "name": "Armi Narottambhai Senjariya"
+  }
 ]
