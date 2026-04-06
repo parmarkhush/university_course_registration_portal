@@ -139,10 +139,8 @@ const PORTAL_STATE = {
 };
 
 const ACADEMIC_CALENDAR = {
-    title: 'Pandit Deendayal Energy University Academic Calendar',
+    title: 'Academic Calendar',
     location: 'Gandhinagar, Gujarat, India',
-    sourceLabel: 'Official PDEU Academic Calendar 2024-25 for FoET/FoLS',
-    sourceUrl: 'https://api.pdeu.ac.in/pdeu-docs/academics/AcademicCalendarFOETFOLS.pdf',
     highlights: [
         { label: 'Monsoon / Odd Semester Starts', value: '21 July 2025' },
         { label: 'Diwali Break', value: '20 to 24 October 2025' },
@@ -422,11 +420,7 @@ function hasTimeConflict(course, enrolledCourses) {
 }
 
 function getRegistrationValidation(course) {
-    const userRecord = getCurrentUserRecord();
     const myEnrolledIds = getUserEnrollments();
-    const enrolledCourses = myEnrolledIds
-        .map(id => getCourseById(id))
-        .filter(Boolean);
 
     if (!course) {
         return { allowed: false, message: 'Course not found.' };
@@ -436,41 +430,11 @@ function getRegistrationValidation(course) {
         return { allowed: false, message: 'Already enrolled.' };
     }
 
-    if (userRecord && userRecord.hasHold) {
-        return { allowed: false, message: 'Registration hold active.' };
-    }
-
-    const completedCourseIds = userRecord && Array.isArray(userRecord.completedCourseIds)
-        ? userRecord.completedCourseIds
-        : [];
-    const prerequisites = Array.isArray(course.prerequisites) ? course.prerequisites : [];
-    const missingPrerequisites = prerequisites.filter(id => !completedCourseIds.includes(id));
-    if (missingPrerequisites.length > 0) {
-        return { allowed: false, message: 'Missing prerequisites.' };
-    }
-
-    if (hasTimeConflict(course, enrolledCourses)) {
-        return { allowed: false, message: 'Schedule conflict.' };
-    }
-
-    const baseCredits = userRecord && Number.isFinite(userRecord.baseCredits) ? userRecord.baseCredits : 0;
-    const maxCredits = userRecord && Number.isFinite(userRecord.maxCredits) ? userRecord.maxCredits : 24;
-    const courseCredits = Number.isFinite(course.credits) ? course.credits : 0;
-    const totalCreditsIfEnrolled = baseCredits + getCurrentEnrolledCredits() + courseCredits;
-    if (totalCreditsIfEnrolled > maxCredits) {
-        return { allowed: false, message: 'Credit limit exceeded.' };
-    }
-
     if (myEnrolledIds.length >= 5) {
         return { allowed: false, message: 'You can enroll in up to 5 courses only.' };
     }
 
-    const seatsLeft = course.totalSeats - course.enrolledCount;
-    if (seatsLeft <= 0) {
-        return { allowed: false, message: 'Course full.' };
-    }
-
-    return { allowed: true, message: 'Eligible to enroll.' };
+    return { allowed: true, message: 'Available' };
 }
 
 function initializeAttendanceForCurrentUser() {
@@ -635,6 +599,9 @@ async function loadMarks() {
         listContainer.innerHTML = marks.map(item => `
             <div class="course-card">
                 <h3>${item.subject}</h3>
+                <p><strong>IA:</strong> ${item.iaMarks || 0}/25</p>
+                <p><strong>Mid Sem:</strong> ${item.midSemMarks || 0}/25</p>
+                <p><strong>End Sem:</strong> ${item.endSemMarks || 0}/50</p>
                 <p><strong>Marks:</strong> ${item.score}/${item.maxScore}</p>
                 <p><strong>Percentage:</strong> ${item.percentage}%</p>
                 <p class="seats-info ${item.percentage >= 75 ? '' : (item.percentage >= 40 ? 'low' : 'full')}">
@@ -959,7 +926,6 @@ function loadAcademicCalendar() {
         <div class="schedule-card">
             <h3>${ACADEMIC_CALENDAR.title}</h3>
             <p>${ACADEMIC_CALENDAR.location}</p>
-            <p>Source: <a href="${ACADEMIC_CALENDAR.sourceUrl}" target="_blank" rel="noopener noreferrer">${ACADEMIC_CALENDAR.sourceLabel}</a></p>
             <p>This view shows key semester milestones so students can quickly check important academic dates.</p>
         </div>
     `;

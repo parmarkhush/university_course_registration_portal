@@ -2,7 +2,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Segoe UI", "Calibri", "Trebuchet MS", Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+.sidebar h2,
+.sidebar-eyebrow,
+.page-eyebrow,
+.hero-highlight-label,
+.menu-item,
+.theme-option,
+.course-card button,
+.student-form button[type="submit"] {
+    font-family: "Segoe UI", "Calibri", "Trebuchet MS", Arial, sans-serif;
+    letter-spacing: 0;
 }
 
 :root {
@@ -105,6 +120,8 @@ body {
         radial-gradient(700px 360px at 100% 0%, rgba(72, 196, 177, 0.14), transparent 58%),
         linear-gradient(180deg, var(--bg) 0%, var(--bg-accent) 100%);
     color: var(--text-main);
+    position: relative;
+    overflow-x: hidden;
 }
 
 .dashboard-container {
@@ -121,6 +138,7 @@ body {
     position: sticky;
     top: 0;
     height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar-brand {
@@ -147,6 +165,7 @@ body {
 .sidebar h2 {
     font-size: 28px;
     line-height: 1.15;
+    font-weight: 650;
 }
 
 .user-info {
@@ -253,6 +272,21 @@ body {
     background: linear-gradient(135deg, var(--hero-start), var(--hero-end));
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-hero::after {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -40px;
+    width: 240px;
+    height: 240px;
+    border-radius: 40px;
+    transform: rotate(26deg);
+    background: linear-gradient(135deg, rgba(15, 121, 255, 0.12), rgba(72, 196, 177, 0.08));
+    border: 1px solid rgba(15, 121, 255, 0.08);
 }
 
 .page-eyebrow {
@@ -262,15 +296,63 @@ body {
 
 .page-hero h1 {
     font-size: clamp(1.9rem, 3.5vw, 3rem);
-    line-height: 1.08;
+    line-height: 1.15;
     max-width: 16ch;
     margin-bottom: 12px;
+    font-weight: 650;
 }
 
 .page-copy {
     max-width: 60ch;
     color: var(--text-muted);
-    line-height: 1.7;
+    line-height: 1.82;
+    font-size: 1rem;
+}
+
+.hero-highlight-row {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.hero-highlight-card {
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.52);
+    backdrop-filter: blur(10px);
+}
+
+body[data-theme="dark"] .hero-highlight-card {
+    background: rgba(19, 31, 48, 0.72);
+}
+
+.hero-highlight-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(15, 121, 255, 0.1);
+    color: var(--accent-strong);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hero-highlight-card strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.02rem;
+    color: var(--text-main);
+}
+
+.hero-highlight-card p {
+    color: var(--text-muted);
+    line-height: 1.72;
 }
 
 .content-section h2 {
@@ -319,11 +401,29 @@ body {
 
 .course-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .course-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 22px 44px rgba(39, 72, 110, 0.16);
+}
+
+.course-card::before,
+.overview-card::before,
+.schedule-card::before,
+.notification-card::before,
+.attendance-kpi::before,
+.attendance-chart-card::before,
+.ranking-table-wrap::before {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 4px;
+    margin-bottom: 14px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #4da4ff, #1ccbad);
 }
 
 .course-card h3,
@@ -344,7 +444,7 @@ body {
 .attendance-kpi p,
 .att-bar-label,
 .att-bar-value {
-    line-height: 1.55;
+    line-height: 1.7;
 }
 
 .course-card p,
@@ -470,7 +570,7 @@ body {
 .form-group label {
     margin-bottom: 8px;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .student-form input,
@@ -897,7 +997,8 @@ body {
 
 .ranking-table th {
     color: var(--text-muted);
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 12px;
 }
 
 .profile-card {
@@ -1052,9 +1153,14 @@ body {
         max-width: none;
     }
 
+    .hero-highlight-row,
     .form-row,
     .catalog-toolbar {
         grid-template-columns: 1fr;
+    }
+    
+    .form-row,
+    .catalog-toolbar {
         flex-direction: column;
     }
 }

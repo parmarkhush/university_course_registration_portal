@@ -1,20 +1,22 @@
 const FACULTY_STORAGE_KEY = 'currentFaculty';
 const THEME_STORAGE_KEY = 'portalTheme';
-const FACULTY_SUBJECTS = [
+const DEFAULT_SUBJECTS = [
     'Software Engineering',
     'DAA',
-    'Stats',
     'TOC',
     'COA',
     'DAA Lab',
     'Software Lab',
-    'Design Lab'
+    'Design Thinking Lab'
 ];
 
 const facultyState = {
     currentFaculty: JSON.parse(localStorage.getItem(FACULTY_STORAGE_KEY) || 'null'),
-    attendanceSubject: FACULTY_SUBJECTS[0],
-    marksSubject: FACULTY_SUBJECTS[0],
+    attendanceSubject: '',
+    marksSubject: '',
+    allowedSubjects: [],
+    allowedWeekdays: [],
+    attendanceDate: '',
     students: [],
     announcements: []
 };
@@ -64,6 +66,90 @@ function setTheme(theme) {
     applyTheme(theme);
 }
 
+function getLocalDateString(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function getDateDaysAgo(daysAgo) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - daysAgo);
+    return getLocalDateString(date);
+}
+
+function getDayName(dateString) {
+    const [year, month, day] = String(dateString || '').split('-').map(Number);
+    const date = new Date(year, (month || 1) - 1, day || 1);
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
+}
+
+function updateAttendanceDateHint() {
+    const hint = document.getElementById('attendanceDateHint');
+    if (!hint) {
+        return;
+    }
+
+    const weekdays = facultyState.allowedWeekdays.length
+        ? facultyState.allowedWeekdays.join(', ')
+        : 'your timetable days';
+    hint.textContent = `Allowed only on ${weekdays}. Future dates are blocked and only the last 7 days can be used.`;
+}
+
+function configureAttendanceDateInput() {
+    const input = document.getElementById('attendanceDate');
+    if (!input) {
+        return;
+    }
+
+    input.min = getDateDaysAgo(6);
+    input.max = getLocalDateString();
+
+    if (!facultyState.attendanceDate || facultyState.attendanceDate < input.min || facultyState.attendanceDate > input.max) {
+        facultyState.attendanceDate = input.max;
+    }
+
+    input.value = facultyState.attendanceDate;
+    updateAttendanceDateHint();
+}
+
+function validateSelectedAttendanceDate(showError = true) {
+    const input = document.getElementById('attendanceDate');
+    if (!input) {
+        return true;
+    }
+
+    const value = input.value || facultyState.attendanceDate;
+    const min = input.min;
+    const max = input.max;
+    const dayName = getDayName(value);
+
+    if (!value || value < min || value > max) {
+        if (showError) {
+            showMessage('facultyAttendanceMessage', `Select a date between ${min} and ${max}.`, 'error');
+        }
+        return false;
+    }
+
+    if (facultyState.allowedWeekdays.length && !facultyState.allowedWeekdays.includes(dayName)) {
+        if (showError) {
+            showMessage('facultyAttendanceMessage', `${facultyState.attendanceSubject} attendance can only be marked on ${facultyState.allowedWeekdays.join(', ')}.`, 'error');
+        }
+        return false;
+    }
+
+    if (dayName === 'Saturday' || dayName === 'Sunday') {
+        if (showError) {
+            showMessage('facultyAttendanceMessage', 'Saturday and Sunday are holidays. Attendance cannot be marked on weekends.', 'error');
+        }
+        return false;
+    }
+
+    return true;
+}
+
 function showMessage(elementId, text, type) {
     const element = document.getElementById(elementId);
     if (!element) {
@@ -101,11 +187,51 @@ function showFacultySection(section) {
 function populateSubjectOptions() {
     const attendanceSelect = document.getElementById('attendanceSubject');
     const marksSelect = document.getElementById('marksSubject');
-    const options = FACULTY_SUBJECTS.map(subject => `<option value="${subject}">${subject}</option>`).join('');
+    const subjects = facultyState.allowedSubjects.length ? facultyState.allowedSubjects : DEFAULT_SUBJECTS;
+    const options = subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
     attendanceSelect.innerHTML = options;
     marksSelect.innerHTML = options;
+    facultyState.attendanceSubject = subjects.includes(facultyState.attendanceSubject)
+        ? facultyState.attendanceSubject
+        : subjects[0];
+    facultyState.marksSubject = subjects.includes(facultyState.marksSubject)
+        ? facultyState.marksSubject
+        : subjects[0];
     attendanceSelect.value = facultyState.attendanceSubject;
     marksSelect.value = facultyState.marksSubject;
+}
+
+function renderFacultyAccountStrip() {
+    const container = document.getElementById('facultyAccountStrip');
+    if (!container || !facultyState.currentFaculty) {
+        return;
+    }
+
+    const subjectList = (facultyState.currentFaculty.allowedSubjects || facultyState.allowedSubjects || DEFAULT_SUBJECTS)
+        .map(subject => `<span>${escapeHtml(subject)}</span>`)
+        .join('');
+    const timetableList = (facultyState.currentFaculty.timetable || [])
+        .map(item => `<span>${escapeHtml(item.subject)}: ${escapeHtml((item.weekdays || []).join(', '))}</span>`)
+        .join('');
+
+    container.innerHTML = `
+        <div class="faculty-account-card">
+            <strong>${escapeHtml(facultyState.currentFaculty.name || 'Faculty')}</strong>
+            <p>${escapeHtml(facultyState.currentFaculty.email || '')}</p>
+        </div>
+        <div class="faculty-account-card">
+            <strong>Faculty Code</strong>
+            <p>${escapeHtml(facultyState.currentFaculty.facultyCode || 'Assigned')}</p>
+        </div>
+        <div class="faculty-account-card faculty-account-subjects">
+            <strong>Assigned Subjects</strong>
+            <div class="faculty-subject-tags">${subjectList || '<span>Not assigned</span>'}</div>
+        </div>
+        <div class="faculty-account-card faculty-account-subjects">
+            <strong>Allowed Weekdays</strong>
+            <div class="faculty-subject-tags">${timetableList || '<span>Configured after login</span>'}</div>
+        </div>
+    `;
 }
 
 function renderAttendanceSummary(students) {
@@ -126,6 +252,10 @@ function renderAttendanceSummary(students) {
         <div class="overview-card">
             <h3>Selected Subject</h3>
             <p><strong>${facultyState.attendanceSubject}</strong><br>attendance tracking active</p>
+        </div>
+        <div class="overview-card">
+            <h3>Selected Date</h3>
+            <p><strong>${facultyState.attendanceDate}</strong><br>${facultyState.allowedWeekdays.join(', ') || 'timetable-restricted days'}</p>
         </div>
     `;
 }
@@ -192,15 +322,27 @@ function renderMarksStudents(students) {
             <p><strong>Roll No:</strong> ${student.rollNo}</p>
             <p><strong>Username:</strong> ${student.username}</p>
             <p><strong>Current Marks:</strong> ${student.score}/${student.maxScore}</p>
+            <p><strong>IA:</strong> ${student.iaMarks || 0}/25</p>
+            <p><strong>Mid Sem:</strong> ${student.midSemMarks || 0}/25</p>
+            <p><strong>End Sem:</strong> ${student.endSemMarks || 0}/50</p>
             <p class="seats-info ${student.markPercentage >= 75 ? '' : (student.markPercentage >= 40 ? 'low' : 'full')}">${student.markPercentage}%</p>
             <form class="faculty-marks-form" onsubmit="saveMarks(event, '${student.rollNo}')">
                 <label>
-                    Score
-                    <input type="number" name="score" min="0" step="0.01" value="${student.score}">
+                    IA Marks
+                    <input type="number" name="iaMarks" min="0" max="25" step="0.01" value="${student.iaMarks || 0}">
                 </label>
                 <label>
-                    Max Score
-                    <input type="number" name="maxScore" min="1" step="0.01" value="${student.maxScore}">
+                    Mid Sem Marks
+                    <input type="number" name="midSemMarks" min="0" max="25" step="0.01" value="${student.midSemMarks || 0}">
+                </label>
+                <label>
+                    End Sem Marks
+                    <input type="number" name="endSemMarks" min="0" max="50" step="0.01" value="${student.endSemMarks || 0}">
+                </label>
+                <p class="marks-breakdown-note">Total is calculated automatically out of 100.</p>
+                <label>
+                    Total
+                    <input type="number" name="totalMarks" min="0" max="100" step="0.01" value="${student.score}" readonly>
                 </label>
                 <button type="submit">Save Marks</button>
             </form>
@@ -248,16 +390,42 @@ function renderAnnouncements(announcements) {
     `).join('');
 }
 
+function attachMarksTotalListeners() {
+    document.querySelectorAll('.faculty-marks-form').forEach(form => {
+        const updateTotal = () => {
+            const iaMarks = Number(form.elements.iaMarks.value || 0);
+            const midSemMarks = Number(form.elements.midSemMarks.value || 0);
+            const endSemMarks = Number(form.elements.endSemMarks.value || 0);
+            form.elements.totalMarks.value = (iaMarks + midSemMarks + endSemMarks).toFixed(2).replace(/\.00$/, '');
+        };
+
+        ['iaMarks', 'midSemMarks', 'endSemMarks'].forEach(name => {
+            form.elements[name].addEventListener('input', updateTotal);
+        });
+
+        updateTotal();
+    });
+}
+
 async function loadAttendanceStudents() {
-    const data = await apiRequest(`/api/faculty/students?subject=${encodeURIComponent(facultyState.attendanceSubject)}`);
+    const data = await apiRequest(
+        `/api/faculty/students?subject=${encodeURIComponent(facultyState.attendanceSubject)}&facultyUsername=${encodeURIComponent(facultyState.currentFaculty.username)}`
+    );
+    facultyState.allowedSubjects = data.allowedSubjects || facultyState.allowedSubjects;
+    facultyState.allowedWeekdays = data.allowedWeekdays || [];
+    configureAttendanceDateInput();
     facultyState.students = data.students || [];
     renderAttendanceStudents(facultyState.students);
 }
 
 async function loadMarksStudents() {
-    const data = await apiRequest(`/api/faculty/students?subject=${encodeURIComponent(facultyState.marksSubject)}`);
+    const data = await apiRequest(
+        `/api/faculty/students?subject=${encodeURIComponent(facultyState.marksSubject)}&facultyUsername=${encodeURIComponent(facultyState.currentFaculty.username)}`
+    );
+    facultyState.allowedSubjects = data.allowedSubjects || facultyState.allowedSubjects;
     facultyState.students = data.students || [];
     renderMarksStudents(facultyState.students);
+    attachMarksTotalListeners();
 }
 
 async function loadAnnouncements() {
@@ -293,6 +461,10 @@ function readSelectedPdf(fileInput) {
 }
 
 async function markAttendance(studentRollNo, status) {
+    if (!validateSelectedAttendanceDate(true)) {
+        return;
+    }
+
     try {
         const response = await apiRequest('/api/faculty/attendance', {
             method: 'POST',
@@ -300,6 +472,7 @@ async function markAttendance(studentRollNo, status) {
                 facultyUsername: facultyState.currentFaculty.username,
                 studentRollNo,
                 subjectName: facultyState.attendanceSubject,
+                attendanceDate: facultyState.attendanceDate,
                 status
             })
         });
@@ -313,8 +486,9 @@ async function markAttendance(studentRollNo, status) {
 async function saveMarks(event, studentRollNo) {
     event.preventDefault();
     const form = event.currentTarget;
-    const score = Number(form.elements.score.value);
-    const maxScore = Number(form.elements.maxScore.value);
+    const iaMarks = Number(form.elements.iaMarks.value);
+    const midSemMarks = Number(form.elements.midSemMarks.value);
+    const endSemMarks = Number(form.elements.endSemMarks.value);
 
     try {
         const response = await apiRequest('/api/faculty/marks', {
@@ -323,8 +497,9 @@ async function saveMarks(event, studentRollNo) {
                 facultyUsername: facultyState.currentFaculty.username,
                 studentRollNo,
                 subjectName: facultyState.marksSubject,
-                score,
-                maxScore
+                iaMarks,
+                midSemMarks,
+                endSemMarks
             })
         });
         showMessage('facultyMarksMessage', response.message, 'success');
@@ -366,9 +541,23 @@ async function publishAnnouncement(event) {
 if (!facultyState.currentFaculty) {
     window.location.href = 'index.html';
 } else {
+    facultyState.attendanceDate = getLocalDateString();
+    facultyState.allowedSubjects = Array.isArray(facultyState.currentFaculty.allowedSubjects) && facultyState.currentFaculty.allowedSubjects.length
+        ? facultyState.currentFaculty.allowedSubjects
+        : DEFAULT_SUBJECTS;
+    facultyState.attendanceSubject = facultyState.allowedSubjects[0];
+    facultyState.marksSubject = facultyState.allowedSubjects[0];
+
     document.getElementById('attendanceSubject').addEventListener('change', async event => {
         facultyState.attendanceSubject = event.target.value;
         await loadAttendanceStudents();
+    });
+
+    configureAttendanceDateInput();
+    document.getElementById('attendanceDate').addEventListener('change', event => {
+        facultyState.attendanceDate = event.target.value || getLocalDateString();
+        validateSelectedAttendanceDate(true);
+        renderAttendanceSummary(facultyState.students);
     });
 
     document.getElementById('facultyAttendanceRollNo').addEventListener('input', event => {
@@ -408,6 +597,7 @@ if (!facultyState.currentFaculty) {
         button.addEventListener('click', () => setTheme(button.dataset.themeChoice));
     });
     populateSubjectOptions();
+    renderFacultyAccountStrip();
     showFacultySection('attendance');
 }
 

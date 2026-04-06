@@ -36,14 +36,34 @@
             <p class="page-eyebrow">Faculty Dashboard</p>
             <h1>Track classes, update attendance, and publish marks for each subject.</h1>
             <p class="page-copy">Use the same portal system as students, but with faculty controls for attendance and marks.</p>
+            <div class="faculty-account-strip" id="facultyAccountStrip"></div>
+            <div class="hero-highlight-row faculty-hero-row">
+                <article class="hero-highlight-card">
+                    <span class="hero-highlight-label">Control</span>
+                    <strong>Attendance Desk</strong>
+                    <p>Review students by subject and mark present or absent in a focused panel.</p>
+                </article>
+                <article class="hero-highlight-card">
+                    <span class="hero-highlight-label">Assessment</span>
+                    <strong>Marks Upload</strong>
+                    <p>Update class performance quickly with roll-number-based grading cards.</p>
+                </article>
+                <article class="hero-highlight-card">
+                    <span class="hero-highlight-label">Communication</span>
+                    <strong>Targeted Notices</strong>
+                    <p>Broadcast to all students or send task instructions to a specific roll number.</p>
+                </article>
+            </div>
         </header>
 
         <div class="content-section" id="facultyAttendanceSection">
             <h2>Attendance Management</h2>
             <div class="catalog-toolbar faculty-toolbar">
                 <select id="attendanceSubject"></select>
+                <input type="date" id="attendanceDate">
                 <input type="text" id="facultyAttendanceRollNo" placeholder="Enter student roll number">
             </div>
+            <p id="attendanceDateHint" class="attendance-date-hint"></p>
             <div class="student-overview" id="facultyAttendanceSummary"></div>
             <p id="facultyAttendanceMessage" class="form-message" aria-live="polite"></p>
             <div id="facultyAttendanceList" class="course-grid"></div>

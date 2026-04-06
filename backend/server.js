@@ -8,15 +8,120 @@ dotenv.config();
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
-const ATTENDANCE_SUBJECTS = [
-    'Software Engineering',
-    'DAA',
-    'Stats',
-    'TOC',
-    'COA',
-    'DAA Lab',
-    'Software Lab',
-    'Design Lab'
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const HOLIDAY_DAYS = ['Saturday', 'Sunday'];
+const SUBJECT_DETAILS = [
+    { name: 'Software Engineering', code: '24CS209T' },
+    { name: 'DAA', code: '24CS210T' },
+    { name: 'TOC', code: '24CS208T' },
+    { name: 'COA', code: '24CS207T' },
+    { name: 'DAA Lab', code: '24CS210P' },
+    { name: 'Software Lab', code: '24CS209P' },
+    { name: 'Design Thinking Lab', code: '24CS205P' }
+];
+const ATTENDANCE_SUBJECTS = SUBJECT_DETAILS.map(subject => subject.name);
+const DEFAULT_STUDENT_PASSWORD = 'student123';
+const DEFAULT_STUDENT_MOBILE = '9999999999';
+const MIN_SEEDED_ROLL = 329;
+const MAX_SEEDED_ROLL = 397;
+const FACULTY_ACCOUNT_DEFINITIONS = [
+    {
+        username: 'apt',
+        facultyName: 'Ashish Patel',
+        facultyCode: 'APT',
+        email: 'apt@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['Software Engineering', 'Software Lab'],
+        subjectSchedule: {
+            'Software Engineering': ['Wednesday', 'Thursday', 'Friday'],
+            'Software Lab': ['Tuesday', 'Friday']
+        }
+    },
+    {
+        username: 'arni',
+        facultyName: 'Archana Nigam',
+        facultyCode: 'ARNI',
+        email: 'arni@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['Design Thinking Lab'],
+        subjectSchedule: {
+            'Design Thinking Lab': ['Friday']
+        }
+    },
+    {
+        username: 'bht',
+        facultyName: 'Bhaumik Thakkar',
+        facultyCode: 'BHT',
+        email: 'bht@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['DAA Lab'],
+        subjectSchedule: {
+            'DAA Lab': ['Tuesday']
+        }
+    },
+    {
+        username: 'kms',
+        facultyName: 'Komal Singh',
+        facultyCode: 'KMS',
+        email: 'kms@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['DAA'],
+        subjectSchedule: {
+            DAA: ['Monday', 'Wednesday', 'Friday']
+        }
+    },
+    {
+        username: 'ntd',
+        facultyName: 'Nishant Doshi',
+        facultyCode: 'NTD',
+        email: 'ntd@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['DAA Lab'],
+        subjectSchedule: {
+            'DAA Lab': ['Thursday']
+        }
+    },
+    {
+        username: 'shm',
+        facultyName: 'Shakti Mishra',
+        facultyCode: 'SHM',
+        email: 'shm@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['Design Thinking Lab'],
+        subjectSchedule: {
+            'Design Thinking Lab': ['Thursday']
+        }
+    },
+    {
+        username: 'sjd',
+        facultyName: 'Sanjeev Dwivedi',
+        facultyCode: 'SJD',
+        email: 'sjd@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['TOC'],
+        subjectSchedule: {
+            TOC: ['Monday', 'Tuesday', 'Thursday', 'Friday']
+        }
+    },
+    {
+        username: 'tabh',
+        facultyName: 'Tanmay Bhowmik',
+        facultyCode: 'TABH',
+        email: 'tabh@university.edu',
+        password: 'faculty123',
+        department: 'Computer Engineering',
+        allowedSubjects: ['COA'],
+        subjectSchedule: {
+            COA: ['Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        }
+    }
 ];
 const STUDENT_EMAIL_DOMAIN = 'sot.pdpu.ac.in';
 const allowedStudentMap = new Map(
@@ -78,6 +183,16 @@ function mapUserRow(row) {
 
 function normalizeRollNo(value) {
     return String(value || '').trim().toUpperCase();
+}
+
+function isManagedStudentRollNo(rollNo) {
+    const match = normalizeRollNo(rollNo).match(/^24BCP(\d{3})$/);
+    if (!match) {
+        return false;
+    }
+
+    const numericPart = Number(match[1]);
+    return numericPart >= MIN_SEEDED_ROLL && numericPart <= MAX_SEEDED_ROLL;
 }
 
 function resolveAllowedRollNo(value) {
@@ -170,6 +285,9 @@ function mapMarksSummaryRows(rows) {
             row.subject_name,
             {
                 subject: row.subject_name,
+                iaMarks: Number(row.ia_marks || 0),
+                midSemMarks: Number(row.mid_sem_marks || 0),
+                endSemMarks: Number(row.end_sem_marks || 0),
                 score: Number(row.score || 0),
                 maxScore: Number(row.max_score || 0)
             }
@@ -179,6 +297,9 @@ function mapMarksSummaryRows(rows) {
     return ATTENDANCE_SUBJECTS.map(subject => {
         const record = valuesBySubject.get(subject) || {
             subject,
+            iaMarks: 0,
+            midSemMarks: 0,
+            endSemMarks: 0,
             score: 0,
             maxScore: 100
         };
@@ -202,6 +323,224 @@ function mapAnnouncementRow(row) {
         pdfFileName: row.pdf_file_name,
         hasPdf: Boolean(row.pdf_base64)
     };
+}
+
+function getSubjectDetail(subjectName) {
+    return SUBJECT_DETAILS.find(subject => subject.name === subjectName) || {
+        name: subjectName,
+        code: ''
+    };
+}
+
+function getFacultyConfig(username) {
+    return FACULTY_ACCOUNT_DEFINITIONS.find(item => item.username === String(username || '').trim().toLowerCase()) || null;
+}
+
+function getAllowedSubjectsForFaculty(username) {
+    const config = getFacultyConfig(username);
+    return config && Array.isArray(config.allowedSubjects) && config.allowedSubjects.length
+        ? config.allowedSubjects
+        : ATTENDANCE_SUBJECTS;
+}
+
+function getAllowedWeekdaysForFacultySubject(username, subjectName) {
+    const config = getFacultyConfig(username);
+    const weekdays = config?.subjectSchedule?.[subjectName];
+    return Array.isArray(weekdays) ? weekdays : [];
+}
+
+function getTimetableSummaryForFaculty(username) {
+    return getAllowedSubjectsForFaculty(username).map(subjectName => ({
+        subject: subjectName,
+        subjectCode: getSubjectDetail(subjectName).code,
+        weekdays: getAllowedWeekdaysForFacultySubject(username, subjectName)
+    }));
+}
+
+function getLocalDateString(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function getDateDaysAgo(daysAgo) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - daysAgo);
+    return getLocalDateString(date);
+}
+
+function parseDateOnly(value) {
+    const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) {
+        return null;
+    }
+
+    const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function validateAttendanceDateForFaculty(username, subjectName, attendanceDate) {
+    const parsedDate = parseDateOnly(attendanceDate);
+    if (!parsedDate) {
+        return { ok: false, message: 'Attendance date must be in YYYY-MM-DD format.' };
+    }
+
+    const selectedDate = getLocalDateString(parsedDate);
+    const latestAllowed = getLocalDateString();
+    const earliestAllowed = getDateDaysAgo(6);
+
+    if (selectedDate > latestAllowed) {
+        return { ok: false, message: 'Future attendance is not allowed.' };
+    }
+
+    if (selectedDate < earliestAllowed) {
+        return { ok: false, message: `Attendance can only be added from ${earliestAllowed} to ${latestAllowed}.` };
+    }
+
+    const allowedWeekdays = getAllowedWeekdaysForFacultySubject(username, subjectName);
+    const dayName = DAY_NAMES[parsedDate.getDay()];
+    if (HOLIDAY_DAYS.includes(dayName)) {
+        return { ok: false, message: 'Saturday and Sunday are holidays. Attendance cannot be marked on weekends.' };
+    }
+
+    if (allowedWeekdays.length > 0 && !allowedWeekdays.includes(dayName)) {
+        return {
+            ok: false,
+            message: `${subjectName} attendance can only be marked on ${allowedWeekdays.join(', ')}.`
+        };
+    }
+
+    return {
+        ok: true,
+        allowedWeekdays,
+        selectedDate,
+        earliestAllowed,
+        latestAllowed
+    };
+}
+
+function mapFacultyRow(row) {
+    const allowedSubjects = getAllowedSubjectsForFaculty(row.username);
+    return {
+        id: row.id,
+        username: row.username,
+        name: row.faculty_name,
+        email: row.email,
+        department: row.department,
+        facultyCode: getFacultyConfig(row.username)?.facultyCode || '',
+        allowedSubjects,
+        allowedSubjectDetails: allowedSubjects.map(getSubjectDetail),
+        timetable: getTimetableSummaryForFaculty(row.username)
+    };
+}
+
+async function refreshAttendanceSummary(studentUserId, subjectName, facultyId) {
+    const [summaryRows] = await pool.query(
+        `SELECT
+            COALESCE(SUM(CASE WHEN status = 'present' THEN 1 ELSE 0 END), 0) AS attended_classes,
+            COUNT(*) AS total_classes
+         FROM attendance_sessions
+         WHERE student_user_id = ? AND subject_name = ?`,
+        [studentUserId, subjectName]
+    );
+
+    const attendedClasses = Number(summaryRows[0]?.attended_classes || 0);
+    const totalClasses = Number(summaryRows[0]?.total_classes || 0);
+
+    await pool.query(
+        `INSERT INTO attendance_records
+            (student_user_id, subject_name, attended_classes, total_classes, updated_by_faculty_id)
+         VALUES (?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE
+            attended_classes = VALUES(attended_classes),
+            total_classes = VALUES(total_classes),
+            updated_by_faculty_id = VALUES(updated_by_faculty_id)`,
+        [studentUserId, subjectName, attendedClasses, totalClasses, facultyId]
+    );
+
+    return {
+        subject: subjectName,
+        attendedClasses,
+        totalClasses,
+        percentage: totalClasses > 0
+            ? Number(((attendedClasses / totalClasses) * 100).toFixed(1))
+            : 0
+    };
+}
+
+async function ensureDatabaseSetup() {
+    await pool.query(
+        `CREATE TABLE IF NOT EXISTS attendance_sessions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_user_id INT NOT NULL,
+            subject_name VARCHAR(120) NOT NULL,
+            attendance_date DATE NOT NULL,
+            status ENUM('present', 'absent') NOT NULL,
+            updated_by_faculty_id INT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            CONSTRAINT fk_attendance_sessions_student
+                FOREIGN KEY (student_user_id) REFERENCES users(id)
+                ON DELETE CASCADE,
+            CONSTRAINT fk_attendance_sessions_faculty
+                FOREIGN KEY (updated_by_faculty_id) REFERENCES faculty_users(id)
+                ON DELETE SET NULL,
+            CONSTRAINT uq_attendance_session UNIQUE (student_user_id, subject_name, attendance_date)
+        )`
+    );
+
+    await pool.query(
+        `ALTER TABLE student_marks
+            ADD COLUMN IF NOT EXISTS ia_marks DECIMAL(6,2) NOT NULL DEFAULT 0 AFTER subject_name,
+            ADD COLUMN IF NOT EXISTS mid_sem_marks DECIMAL(6,2) NOT NULL DEFAULT 0 AFTER ia_marks,
+            ADD COLUMN IF NOT EXISTS end_sem_marks DECIMAL(6,2) NOT NULL DEFAULT 0 AFTER mid_sem_marks`
+    );
+
+    for (const faculty of FACULTY_ACCOUNT_DEFINITIONS) {
+        await pool.query(
+            `INSERT INTO faculty_users (username, faculty_name, email, password, department)
+             VALUES (?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE
+                faculty_name = VALUES(faculty_name),
+                email = VALUES(email),
+                password = VALUES(password),
+                department = VALUES(department)`,
+            [faculty.username, faculty.facultyName, faculty.email, faculty.password, faculty.department]
+        );
+    }
+
+    for (const student of allowedStudents.filter(item => isManagedStudentRollNo(item.rollNo))) {
+        const username = student.rollNo.toLowerCase();
+        const email = `${username}@${STUDENT_EMAIL_DOMAIN}`;
+
+        await pool.query(
+            `INSERT INTO users
+                (username, email, mobile, password, completed_course_ids)
+             VALUES (?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE
+                username = username`,
+            [username, email, DEFAULT_STUDENT_MOBILE, DEFAULT_STUDENT_PASSWORD, JSON.stringify([])]
+        );
+
+        const [userRows] = await pool.query(
+            'SELECT id FROM users WHERE username = ? LIMIT 1',
+            [username]
+        );
+
+        if (userRows.length === 0) {
+            continue;
+        }
+
+        await pool.query(
+            `INSERT INTO student_profiles (user_id, name, roll_no, gender, cpi, preferred_courses)
+             VALUES (?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE
+                name = VALUES(name),
+                roll_no = VALUES(roll_no)`,
+            [userRows[0].id, student.name, student.rollNo, 'Not Specified', 0, JSON.stringify([])]
+        );
+    }
 }
 
 async function getStudentByRollNo(rollNo) {
@@ -326,13 +665,7 @@ app.post('/api/auth/login', async (req, res) => {
             return res.json({
                 message: 'Faculty login successful.',
                 role: 'faculty',
-                faculty: {
-                    id: facultyRows[0].id,
-                    username: facultyRows[0].username,
-                    name: facultyRows[0].faculty_name,
-                    email: facultyRows[0].email,
-                    department: facultyRows[0].department
-                }
+                faculty: mapFacultyRow(facultyRows[0])
             });
         }
 
@@ -361,13 +694,7 @@ app.post('/api/faculty/login', async (req, res) => {
 
         res.json({
             message: 'Faculty login successful.',
-            faculty: {
-                id: rows[0].id,
-                username: rows[0].username,
-                name: rows[0].faculty_name,
-                email: rows[0].email,
-                department: rows[0].department
-            }
+            faculty: mapFacultyRow(rows[0])
         });
     } catch (error) {
         res.status(500).json({ message: 'Unable to log in faculty.', error: error.message });
@@ -551,7 +878,7 @@ app.get('/api/students/:username/marks', async (req, res) => {
         }
 
         const [rows] = await pool.query(
-            `SELECT subject_name, score, max_score
+            `SELECT subject_name, ia_marks, mid_sem_marks, end_sem_marks, score, max_score
              FROM student_marks
              WHERE student_user_id = ?
              ORDER BY subject_name ASC`,
@@ -601,9 +928,11 @@ app.get('/api/students/:username/announcements', async (req, res) => {
 });
 
 app.get('/api/faculty/students', async (req, res) => {
-    const subjectName = ATTENDANCE_SUBJECTS.includes(req.query.subject)
+    const facultyUsername = String(req.query.facultyUsername || '').trim().toLowerCase();
+    const allowedSubjects = getAllowedSubjectsForFaculty(facultyUsername);
+    const subjectName = allowedSubjects.includes(req.query.subject)
         ? req.query.subject
-        : ATTENDANCE_SUBJECTS[0];
+        : allowedSubjects[0];
 
     try {
         const [rows] = await pool.query(
@@ -613,6 +942,9 @@ app.get('/api/faculty/students', async (req, res) => {
                     COALESCE(sp.cpi, 0) AS cpi,
                     COALESCE(ar.attended_classes, 0) AS attended_classes,
                     COALESCE(ar.total_classes, 0) AS total_classes,
+                    COALESCE(sm.ia_marks, 0) AS ia_marks,
+                    COALESCE(sm.mid_sem_marks, 0) AS mid_sem_marks,
+                    COALESCE(sm.end_sem_marks, 0) AS end_sem_marks,
                     COALESCE(sm.score, 0) AS mark_score,
                     COALESCE(sm.max_score, 100) AS max_score
              FROM users u
@@ -621,14 +953,20 @@ app.get('/api/faculty/students', async (req, res) => {
                 ON ar.student_user_id = u.id
                AND ar.subject_name = ?
              LEFT JOIN student_marks sm
-                ON sm.student_user_id = u.id
-               AND sm.subject_name = ?
-             ORDER BY name ASC`,
-            [subjectName, subjectName]
+                 ON sm.student_user_id = u.id
+                AND sm.subject_name = ?
+             WHERE UPPER(sp.roll_no) LIKE '24BCP%'
+               AND CAST(RIGHT(sp.roll_no, 3) AS UNSIGNED) BETWEEN ? AND ?
+             ORDER BY sp.roll_no ASC`,
+            [subjectName, subjectName, MIN_SEEDED_ROLL, MAX_SEEDED_ROLL]
         );
 
         res.json({
             subject: subjectName,
+            subjectDetail: getSubjectDetail(subjectName),
+            allowedSubjects,
+            allowedSubjectDetails: allowedSubjects.map(getSubjectDetail),
+            allowedWeekdays: getAllowedWeekdaysForFacultySubject(facultyUsername, subjectName),
             students: rows.map(row => ({
                 userId: row.user_id,
                 username: row.username,
@@ -637,6 +975,9 @@ app.get('/api/faculty/students', async (req, res) => {
                 cpi: Number(row.cpi),
                 attendedClasses: Number(row.attended_classes),
                 totalClasses: Number(row.total_classes),
+                iaMarks: Number(row.ia_marks),
+                midSemMarks: Number(row.mid_sem_marks),
+                endSemMarks: Number(row.end_sem_marks),
                 score: Number(row.mark_score),
                 maxScore: Number(row.max_score),
                 markPercentage: Number(row.max_score) > 0
@@ -669,24 +1010,31 @@ app.get('/api/faculty/announcements', async (req, res) => {
 });
 
 app.post('/api/faculty/attendance', async (req, res) => {
-    const { facultyUsername, studentUsername, studentRollNo, subjectName, status } = req.body;
+    const { facultyUsername, studentUsername, studentRollNo, subjectName, status, attendanceDate } = req.body;
+    const normalizedFacultyUsername = String(facultyUsername || '').trim().toLowerCase();
+    const allowedSubjects = getAllowedSubjectsForFaculty(normalizedFacultyUsername);
 
-    if (!facultyUsername || !subjectName || !status || (!studentUsername && !studentRollNo)) {
-        return res.status(400).json({ message: 'Faculty username, student reference, subject, and status are required.' });
+    if (!normalizedFacultyUsername || !subjectName || !status || !attendanceDate || (!studentUsername && !studentRollNo)) {
+        return res.status(400).json({ message: 'Faculty username, student reference, subject, attendance date, and status are required.' });
     }
 
-    if (!ATTENDANCE_SUBJECTS.includes(subjectName)) {
-        return res.status(400).json({ message: 'Invalid subject selected.' });
+    if (!allowedSubjects.includes(subjectName)) {
+        return res.status(400).json({ message: 'You can mark attendance only for your assigned subjects.' });
     }
 
     if (!['present', 'absent'].includes(status)) {
         return res.status(400).json({ message: 'Attendance status must be present or absent.' });
     }
 
+    const dateValidation = validateAttendanceDateForFaculty(normalizedFacultyUsername, subjectName, attendanceDate);
+    if (!dateValidation.ok) {
+        return res.status(400).json({ message: dateValidation.message });
+    }
+
     try {
         const [facultyRows] = await pool.query(
             'SELECT id FROM faculty_users WHERE username = ? LIMIT 1',
-            [facultyUsername]
+            [normalizedFacultyUsername]
         );
         let studentRows = [];
         if (studentRollNo) {
@@ -713,42 +1061,20 @@ app.post('/api/faculty/attendance', async (req, res) => {
         const facultyId = facultyRows[0].id;
         const studentUserId = studentRows[0].id;
         const resolvedStudentUsername = studentRows[0].username || studentUsername || studentRollNo;
-        const attendedIncrement = status === 'present' ? 1 : 0;
 
         await pool.query(
-            `INSERT INTO attendance_records
-                (student_user_id, subject_name, attended_classes, total_classes, updated_by_faculty_id)
-             VALUES (?, ?, ?, 1, ?)
+            `INSERT INTO attendance_sessions
+                (student_user_id, subject_name, attendance_date, status, updated_by_faculty_id)
+             VALUES (?, ?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE
-                attended_classes = attended_classes + VALUES(attended_classes),
-                total_classes = total_classes + 1,
+                status = VALUES(status),
                 updated_by_faculty_id = VALUES(updated_by_faculty_id)`,
-            [studentUserId, subjectName, attendedIncrement, facultyId]
+            [studentUserId, subjectName, attendanceDate, status, facultyId]
         );
 
-        const [rows] = await pool.query(
-            `SELECT subject_name, attended_classes, total_classes
-             FROM attendance_records
-             WHERE student_user_id = ? AND subject_name = ?
-             LIMIT 1`,
-            [studentUserId, subjectName]
-        );
-
-        const row = rows[0] || {
-            subject_name: subjectName,
-            attended_classes: 0,
-            total_classes: 0
-        };
-        const record = {
-            subject: row.subject_name,
-            attendedClasses: Number(row.attended_classes),
-            totalClasses: Number(row.total_classes),
-            percentage: Number(row.total_classes) > 0
-                ? Number(((Number(row.attended_classes) / Number(row.total_classes)) * 100).toFixed(1))
-                : 0
-        };
+        const record = await refreshAttendanceSummary(studentUserId, subjectName, facultyId);
         res.json({
-            message: `Attendance marked as ${status} for ${resolvedStudentUsername} in ${subjectName}.`,
+            message: `Attendance marked as ${status} for ${resolvedStudentUsername} in ${subjectName} on ${attendanceDate}.`,
             attendance: record
         });
     } catch (error) {
@@ -757,27 +1083,37 @@ app.post('/api/faculty/attendance', async (req, res) => {
 });
 
 app.post('/api/faculty/marks', async (req, res) => {
-    const { facultyUsername, studentUsername, studentRollNo, subjectName, score, maxScore } = req.body;
+    const { facultyUsername, studentUsername, studentRollNo, subjectName, iaMarks, midSemMarks, endSemMarks } = req.body;
+    const normalizedFacultyUsername = String(facultyUsername || '').trim().toLowerCase();
+    const allowedSubjects = getAllowedSubjectsForFaculty(normalizedFacultyUsername);
 
-    if (!facultyUsername || !subjectName || score === undefined || maxScore === undefined || (!studentUsername && !studentRollNo)) {
-        return res.status(400).json({ message: 'Faculty username, student reference, subject, score, and max score are required.' });
+    if (!normalizedFacultyUsername || !subjectName || iaMarks === undefined || midSemMarks === undefined || endSemMarks === undefined || (!studentUsername && !studentRollNo)) {
+        return res.status(400).json({ message: 'Faculty username, student reference, subject, IA marks, Mid Sem marks, and End Sem marks are required.' });
     }
 
-    if (!ATTENDANCE_SUBJECTS.includes(subjectName)) {
-        return res.status(400).json({ message: 'Invalid subject selected.' });
+    if (!allowedSubjects.includes(subjectName)) {
+        return res.status(400).json({ message: 'You can upload marks only for your assigned subjects.' });
     }
 
-    const parsedScore = Number(score);
-    const parsedMaxScore = Number(maxScore);
+    const parsedIaMarks = Number(iaMarks);
+    const parsedMidSemMarks = Number(midSemMarks);
+    const parsedEndSemMarks = Number(endSemMarks);
+    const parsedScore = parsedIaMarks + parsedMidSemMarks + parsedEndSemMarks;
+    const parsedMaxScore = 100;
 
-    if (!Number.isFinite(parsedScore) || !Number.isFinite(parsedMaxScore) || parsedScore < 0 || parsedMaxScore <= 0 || parsedScore > parsedMaxScore) {
-        return res.status(400).json({ message: 'Enter valid marks where score is between 0 and max score.' });
+    if (
+        !Number.isFinite(parsedIaMarks) || !Number.isFinite(parsedMidSemMarks) || !Number.isFinite(parsedEndSemMarks) ||
+        parsedIaMarks < 0 || parsedIaMarks > 25 ||
+        parsedMidSemMarks < 0 || parsedMidSemMarks > 25 ||
+        parsedEndSemMarks < 0 || parsedEndSemMarks > 50
+    ) {
+        return res.status(400).json({ message: 'Enter valid marks: IA out of 25, Mid Sem out of 25, and End Sem out of 50.' });
     }
 
     try {
         const [facultyRows] = await pool.query(
             'SELECT id FROM faculty_users WHERE username = ? LIMIT 1',
-            [facultyUsername]
+            [normalizedFacultyUsername]
         );
         let studentRows = [];
         if (studentRollNo) {
@@ -802,13 +1138,16 @@ app.post('/api/faculty/marks', async (req, res) => {
         }
 
         await pool.query(
-            `INSERT INTO student_marks (student_user_id, subject_name, score, max_score, updated_by_faculty_id)
-             VALUES (?, ?, ?, ?, ?)
+            `INSERT INTO student_marks (student_user_id, subject_name, ia_marks, mid_sem_marks, end_sem_marks, score, max_score, updated_by_faculty_id)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE
+                ia_marks = VALUES(ia_marks),
+                mid_sem_marks = VALUES(mid_sem_marks),
+                end_sem_marks = VALUES(end_sem_marks),
                 score = VALUES(score),
                 max_score = VALUES(max_score),
                 updated_by_faculty_id = VALUES(updated_by_faculty_id)`,
-            [studentRows[0].id, subjectName, parsedScore, parsedMaxScore, facultyRows[0].id]
+            [studentRows[0].id, subjectName, parsedIaMarks, parsedMidSemMarks, parsedEndSemMarks, parsedScore, parsedMaxScore, facultyRows[0].id]
         );
 
         const resolvedStudentUsername = studentRows[0].username || studentUsername || studentRollNo;
@@ -817,6 +1156,9 @@ app.post('/api/faculty/marks', async (req, res) => {
             message: `Marks updated for ${resolvedStudentUsername} in ${subjectName}.`,
             mark: {
                 subject: subjectName,
+                iaMarks: parsedIaMarks,
+                midSemMarks: parsedMidSemMarks,
+                endSemMarks: parsedEndSemMarks,
                 score: parsedScore,
                 maxScore: parsedMaxScore,
                 percentage: Number(((parsedScore / parsedMaxScore) * 100).toFixed(1))
@@ -837,8 +1179,9 @@ app.post('/api/faculty/announcements', async (req, res) => {
         pdfMimeType,
         pdfBase64
     } = req.body;
+    const normalizedFacultyUsername = String(facultyUsername || '').trim().toLowerCase();
 
-    if (!facultyUsername || !title || !message) {
+    if (!normalizedFacultyUsername || !title || !message) {
         return res.status(400).json({ message: 'Faculty username, title, and message are required.' });
     }
 
@@ -849,7 +1192,7 @@ app.post('/api/faculty/announcements', async (req, res) => {
     try {
         const [facultyRows] = await pool.query(
             'SELECT id FROM faculty_users WHERE username = ? LIMIT 1',
-            [facultyUsername]
+            [normalizedFacultyUsername]
         );
 
         if (facultyRows.length === 0) {
@@ -919,6 +1262,16 @@ app.use((error, req, res, next) => {
     return next(error);
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
+async function startServer() {
+    try {
+        await ensureDatabaseSetup();
+        app.listen(port, () => {
+            console.log(`Server running on http://localhost:${port}`);
+        });
+    } catch (error) {
+        console.error('Failed to initialize database setup.', error);
+        process.exit(1);
+    }
+}
+
+startServer();

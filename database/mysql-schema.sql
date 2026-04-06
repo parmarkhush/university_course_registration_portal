@@ -61,10 +61,30 @@ CREATE TABLE IF NOT EXISTS attendance_records (
     CONSTRAINT uq_attendance_student_subject UNIQUE (student_user_id, subject_name)
 );
 
+CREATE TABLE IF NOT EXISTS attendance_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_user_id INT NOT NULL,
+    subject_name VARCHAR(120) NOT NULL,
+    attendance_date DATE NOT NULL,
+    status ENUM('present', 'absent') NOT NULL,
+    updated_by_faculty_id INT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_attendance_sessions_student
+        FOREIGN KEY (student_user_id) REFERENCES users(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_attendance_sessions_faculty
+        FOREIGN KEY (updated_by_faculty_id) REFERENCES faculty_users(id)
+        ON DELETE SET NULL,
+    CONSTRAINT uq_attendance_session UNIQUE (student_user_id, subject_name, attendance_date)
+);
+
 CREATE TABLE IF NOT EXISTS student_marks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_user_id INT NOT NULL,
     subject_name VARCHAR(120) NOT NULL,
+    ia_marks DECIMAL(6,2) NOT NULL DEFAULT 0,
+    mid_sem_marks DECIMAL(6,2) NOT NULL DEFAULT 0,
+    end_sem_marks DECIMAL(6,2) NOT NULL DEFAULT 0,
     score DECIMAL(6,2) NOT NULL DEFAULT 0,
     max_score DECIMAL(6,2) NOT NULL DEFAULT 100,
     updated_by_faculty_id INT NULL,
@@ -94,7 +114,15 @@ CREATE TABLE IF NOT EXISTS faculty_announcements (
 );
 
 INSERT INTO faculty_users (username, faculty_name, email, password, department)
-VALUES ('faculty1', 'Dr. Kavita Shah', 'faculty1@university.edu', 'faculty123', 'Computer Science')
+VALUES
+    ('apt', 'Ashish Patel', 'apt@university.edu', 'faculty123', 'Computer Engineering'),
+    ('arni', 'Archana Nigam', 'arni@university.edu', 'faculty123', 'Computer Engineering'),
+    ('bht', 'Bhaumik Thakkar', 'bht@university.edu', 'faculty123', 'Computer Engineering'),
+    ('kms', 'Komal Singh', 'kms@university.edu', 'faculty123', 'Computer Engineering'),
+    ('ntd', 'Nishant Doshi', 'ntd@university.edu', 'faculty123', 'Computer Engineering'),
+    ('shm', 'Shakti Mishra', 'shm@university.edu', 'faculty123', 'Computer Engineering'),
+    ('sjd', 'Sanjeev Dwivedi', 'sjd@university.edu', 'faculty123', 'Computer Engineering'),
+    ('tabh', 'Tanmay Bhowmik', 'tabh@university.edu', 'faculty123', 'Computer Engineering')
 ON DUPLICATE KEY UPDATE
     faculty_name = VALUES(faculty_name),
     email = VALUES(email),
